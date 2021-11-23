@@ -24,14 +24,20 @@ public class Recipe {
     @Enumerated(EnumType.STRING) // EnumType.ORDINAL did not used because of the possibilty of corruption in enum indexes (in case of adding a new value in the middle of other enum values)
     private Difficulty difficulty;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    // the default cascade action is NONE
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe") // mappedBy is the relation property on child class (Ingredients) on each object of Ingredient there will be a "recipe" property
     private Set<Ingredient> ingredients;
 
     @Lob
     private Byte[] image;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "recipe")
+    @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
+
+    @ManyToMany
+    @JoinTable(name = "recipe_category",
+            joinColumns = @JoinColumn(name = "recipe_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categories;
 
     public Long getId() {
         return id;
@@ -127,5 +133,13 @@ public class Recipe {
 
     public void setIngredients(Set<Ingredient> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
     }
 }
