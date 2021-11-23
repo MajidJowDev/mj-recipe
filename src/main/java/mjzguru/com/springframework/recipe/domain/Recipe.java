@@ -3,6 +3,7 @@ package mjzguru.com.springframework.recipe.domain;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Recipe {
@@ -20,10 +21,13 @@ public class Recipe {
     private String directions;
     //private Difficulty difficulty;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<Ingredient> ingredients;
+
     @Lob
     private Byte[] image;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "recipe")
     private Notes notes;
 
     public Long getId() {
