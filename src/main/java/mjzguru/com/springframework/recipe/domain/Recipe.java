@@ -19,7 +19,10 @@ public class Recipe {
     private String source;
     private String url;
     private String directions;
-    //private Difficulty difficulty;
+
+    // ORDINAL saves the index numbers in db But STRING saves the name in db
+    @Enumerated(EnumType.STRING) // EnumType.ORDINAL did not used because of the possibilty of corruption in enum indexes (in case of adding a new value in the middle of other enum values)
+    private Difficulty difficulty;
 
     @OneToMany(cascade = CascadeType.ALL)
     private Set<Ingredient> ingredients;
@@ -108,5 +111,21 @@ public class Recipe {
 
     public void setNotes(Notes notes) {
         this.notes = notes;
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public Set<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(Set<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 }
