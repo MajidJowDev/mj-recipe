@@ -9,7 +9,8 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String catDescription;
+    //private String catDescription; // Hibernate data initializer does not accept upper case in column names (naming strategies) so this prop should be refactored to "cat_description" or "description"
+    private String description;
 
     @ManyToMany(mappedBy = "categories")
     private Set<Recipe> recipes;
@@ -22,12 +23,12 @@ public class Category {
         this.id = id;
     }
 
-    public String getCatDescription() {
-        return catDescription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setCatDescription(String catDescription) {
-        this.catDescription = catDescription;
+    public void setDescription(String catDescription) {
+        this.description = catDescription;
     }
 
     public Set<Recipe> getRecipes() {

@@ -12,7 +12,8 @@ public class UnitOfMeasure { // reference table
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String uomDescription;
+    //private String uomDescription; // Hibernate data initializer does not accept upper case in column names so this prop should be refactored to "uom_description" or "description"
+    private String description;
 
     public Long getId() {
         return id;
@@ -22,11 +23,11 @@ public class UnitOfMeasure { // reference table
         this.id = id;
     }
 
-    public String getUomDescription() {
-        return uomDescription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setUomDescription(String uom) {
-        this.uomDescription = uom;
+    public void setDescription(String uom) {
+        this.description = uom;
     }
 }
