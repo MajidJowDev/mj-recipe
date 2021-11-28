@@ -3,6 +3,7 @@ package mjzguru.com.springframework.recipe.domain;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -26,7 +27,7 @@ public class Recipe {
 
     // the default cascade action is NONE
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe") // mappedBy is the relation property on child class (Ingredients) on each object of Ingredient there will be a "recipe" property
-    private Set<Ingredient> ingredients;
+    private Set<Ingredient> ingredients = new HashSet<>();
 
     @Lob
     private Byte[] image;
@@ -37,7 +38,7 @@ public class Recipe {
     @ManyToMany
     @JoinTable(name = "recipe_category",
             joinColumns = @JoinColumn(name = "recipe_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<Category> categories;
+    private Set<Category> categories = new HashSet<>();
 
     public Long getId() {
         return id;
