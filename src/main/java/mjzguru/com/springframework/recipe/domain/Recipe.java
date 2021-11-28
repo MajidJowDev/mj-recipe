@@ -19,6 +19,8 @@ public class Recipe {
     private Integer servings;
     private String source;
     private String url;
+
+    @Lob
     private String directions;
 
     // ORDINAL saves the index numbers in db But STRING saves the name in db

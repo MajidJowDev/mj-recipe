@@ -7,55 +7,15 @@
 <body>
 <h1>My Recipes!</h1>
 
-
-<table th:each="recipe : ${recipes}">
-    <p>-----------------------------------------------------------------------------------------------------------------</p>
-    <thead>
-    <h2 th:text="${recipe.description}">Recipe Title</h2>
-    <p th:text="${recipe.url}"></p>
-    <p th:text="${recipe.notes.recipeNotes}">notes</p>
-
+<table>
     <tr>
-        <th>Cook Time</th>
-        <th>Prep Time</th>
-        <th>Servings</th>
-        <th>Difficulty</th>
+        <th>ID</th>
+        <th>Description</th>
     </tr>
-    <tr>
-        <td th:text="${recipe.cookTime}"></td>
-        <td th:text="${recipe.prepTime}"></td>
-        <td th:text="${recipe.servings}"></td>
-        <td th:text="${recipe.difficulty}"></td>
+    <tr th:each="recipe : ${recipes}">
+        <td th:text="${recipe.id}">123</td>
+        <td th:text="${recipe.description}">Tasty Goodnees</td>
     </tr>
-
-    <tr>
-        <td><br></td>
-    </tr>
-
-    <tr>
-        <td><h3>Ingredients</h3></td>
-    </tr>
-    <tr>
-        <th style="width: 250px;">Ingredient</th>
-        <th style="width: 100px;">Amount</th>
-        <th style="width: 100px;">UOM</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="igredient : ${recipe.ingredients}">
-        <td th:text="${igredient.description}" style="width: 250px;">ingredient</td>
-        <td th:text="${igredient.amount}" style="width: 100px;">amount</td>
-        <td th:text="${igredient.uom.description}" style="width: 100px;">uom</td>
-    </tr>
-    <tr><td><br></td> </tr>
-    <tr>
-        <td><h3>Directions</h3></td>
-    </tr>
-    <tr>
-        <td th:text="${recipe.directions}">directions text</td>
-    </tr>
-    </tbody>
-
 </table>
 
 </body>
