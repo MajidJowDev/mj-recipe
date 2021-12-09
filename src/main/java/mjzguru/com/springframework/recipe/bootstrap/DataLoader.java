@@ -1,5 +1,6 @@
 package mjzguru.com.springframework.recipe.bootstrap;
 
+import lombok.extern.slf4j.Slf4j;
 import mjzguru.com.springframework.recipe.domain.*;
 import mjzguru.com.springframework.recipe.repositories.CategoryRepository;
 import mjzguru.com.springframework.recipe.repositories.RecipeRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.util.*;
 
+@Slf4j
 @Component
 public class DataLoader implements CommandLineRunner, ApplicationListener<ContextRefreshedEvent> {
 
@@ -37,8 +39,11 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
     //Guru approach
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        System.out.println("Data Loaded by Guru's Profile");
+        //System.out.println("Data Loaded by Guru's Profile");
+        log.info("Data loaded in DataLoader class by Guru Method!!!!");
+
         recipeRepository.saveAll(getRecipes());
+        log.debug("getRecipes Method Called Successfully!!!!****");
     }
 
     private void loadRecipesData(){

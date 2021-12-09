@@ -1,5 +1,6 @@
 package mjzguru.com.springframework.recipe.controllers;
 
+import lombok.extern.slf4j.Slf4j;
 import mjzguru.com.springframework.recipe.domain.Category;
 import mjzguru.com.springframework.recipe.domain.UnitOfMeasure;
 import mjzguru.com.springframework.recipe.repositories.CategoryRepository;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Optional;
 
+@Slf4j
 @Controller
 public class IndexController {
 
@@ -36,10 +38,13 @@ public class IndexController {
         this.unitOfMeasureRepository = unitOfMeasureRepository;
         this.recipeRepository = recipeRepository;
         this.recipeService = recipeService;
+
+        log.debug("I'm in IndexController Constructor!!!!");
     }
 
     @RequestMapping({"", "/", "index", "index.html"})
     public String getIndexPage(Model model){
+        log.info("getIndexPage method called!!!!");
 
         model.addAttribute("recipes", recipeService.getRecipes());
 
