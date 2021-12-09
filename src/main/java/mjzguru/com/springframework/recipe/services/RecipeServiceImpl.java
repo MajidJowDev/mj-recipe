@@ -1,5 +1,6 @@
 package mjzguru.com.springframework.recipe.services;
 
+import lombok.extern.slf4j.Slf4j;
 import mjzguru.com.springframework.recipe.domain.Recipe;
 import mjzguru.com.springframework.recipe.repositories.RecipeRepository;
 import org.springframework.stereotype.Service;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.Set;
 
+@Slf4j // logger provided by Lombok
 @Service
 public class RecipeServiceImpl implements RecipeService {
 
@@ -18,6 +20,8 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Set<Recipe> getRecipes() {
+        log.debug("I'm in the service");
+
         Set<Recipe> recipeSet = new HashSet<>();
 
         // adds all objects of RecipeRepository to recipeSet
