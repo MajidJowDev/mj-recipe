@@ -9,6 +9,7 @@ import java.util.Set;
       // to the class in background (so by adding this annotation all getters and setters will be removed from the class and will be handled by @Data)
       // note: if we want to keep some of the Getters and Setters (that may have some other logics in their body) we have to add @Data without using
       // Refactor menu, and remove the simple getters and setters ourselves.
+@EqualsAndHashCode(exclude = {"recipes"}) // added to avoid getting into endless loop because of bi-drectional references and relations (lombok)
 @Entity
 public class Category {
 

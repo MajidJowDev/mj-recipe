@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -38,6 +39,7 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
 
     //Guru approach
     @Override
+    @Transactional // to avoid getting lazy initiation exception
     public void onApplicationEvent(ContextRefreshedEvent event) {
         //System.out.println("Data Loaded by Guru's Profile");
         log.info("Data loaded in DataLoader class by Guru Method!!!!");
