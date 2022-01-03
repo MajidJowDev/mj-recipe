@@ -10,7 +10,12 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
+import org.springframework.mock.http.server.reactive.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,6 +24,8 @@ import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anySet;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 public class IndexControllerTest {
 
@@ -45,7 +52,19 @@ public class IndexControllerTest {
     }
 
     @Test
-    public void getIndexPage() {
+    public void testMockMVC() throws Exception{
+        // testing mvc controllers and Unit Test them, brings a mock servlet context (mock dispatcher servlet)
+        //using it in a standalone setup because if we bring in the web context (spring context) our test is
+        // no longer a unit test and will become an integration test
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(indexController).build();
+        mockMvc.perform(MockMvcRequestBuilders.get("/"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("index"));
+
+    }
+
+    @Test
+    public void getIndexPage() throws Exception{
 
         //given
         Set<Recipe> recipes = new HashSet<>();
@@ -63,7 +82,6 @@ public class IndexControllerTest {
         String viewNameReturnValue = "index"; // expected value
 
         //then
-        //assertEquals(indexController.getIndexPage(model), returnValue);
         assertEquals(viewNameReturnValue,indexController.getIndexPage(model)); // first param = expected, second param = actual
 
         verify(recipeService, times(1)).getRecipes();
