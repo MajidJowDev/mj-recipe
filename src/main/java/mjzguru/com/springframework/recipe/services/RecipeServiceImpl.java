@@ -29,4 +29,9 @@ public class RecipeServiceImpl implements RecipeService {
 
         return recipeSet;
     }
+
+    @Override
+    public Recipe findById(Long id) {
+        return null;
+    }
 }
