@@ -1,5 +1,7 @@
 package mjzguru.com.springframework.recipe.services;
 
+import mjzguru.com.springframework.recipe.converters.RecipeCommandToRecipe;
+import mjzguru.com.springframework.recipe.converters.RecipeToRecipeCommand;
 import mjzguru.com.springframework.recipe.domain.Recipe;
 import mjzguru.com.springframework.recipe.repositories.RecipeRepository;
 
@@ -25,11 +27,18 @@ public class RecipeServiceImplTest {
     @Mock
     RecipeRepository recipeRepository;
 
+    @Mock
+    RecipeToRecipeCommand recipeToRecipeCommand;
+
+    @Mock
+    RecipeCommandToRecipe recipeCommandToRecipe;
+
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);  // uses injected Mock, tells Mockito to Get me a RecipeRepository
 
-        recipeService = new RecipeServiceImpl(recipeRepository);
+        recipeService = new RecipeServiceImpl(recipeRepository, recipeCommandToRecipe, recipeToRecipeCommand);
     }
 
     @Test

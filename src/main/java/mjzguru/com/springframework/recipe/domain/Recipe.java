@@ -49,8 +49,10 @@ public class Recipe {
 
 
     public void setNotes(Notes notes) {
-        this.notes = notes;
-        notes.setRecipe(this); // added to make di-directional relation easier
+        if (notes != null) {
+            this.notes = notes;
+            notes.setRecipe(this);  // added to make di-directional relation easier
+        }
     }
 
     public Recipe addIngredient(Ingredient ingredient){
