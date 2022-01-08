@@ -26,7 +26,8 @@
 <!--            thaction tells thymeleaf that we are going to post to recipe so we don't need to fill up the-->
 <!--            entire url, so thymeleaf is going to parse it at runtime-->
 <!--            The th:action="@{/recipe/} expression directs the form to POST to the /recipe endpoint-->
-            <form th:object="${recipe}" th:action="@{/recipe/}" method="post">
+<!--            <form th:object="${recipe}" th:action="@{/recipe/}" method="post">-->
+            <form th:object="${recipe}" th:action="@{/recipe/}">
                 <input type="hidden" th:field="*{id}"/>
                 <div class="pannel-group">
                     <div class="panel panel-primary">
@@ -109,11 +110,11 @@
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <ul>
+                                    <ul th:if="${not #lists.isEmpty(recipe.ingredients)}">
                                         <li th:remove="all">1 Cup of milk</li>
                                         <li th:remove="all">1 Teaspoon of chocolate</li>
-                                        <!--/*@thymesVar id="uom" type="guru.springframework.domain.UnitOfMeasure"*/-->
-                                        <!--/*@thymesVar id="ingredient.uom" type="guru.springframework.domain.UnitOfMeasure"*/-->
+                                        <!--/*@thymesVar id="ingredient.uom" type="mjzguru.com.springframework.recipe.domain.UnitOfMeasure"*/-->
+                                        <!--/*@thymesVar id="uom" type="mjzguru.com.springframework.recipe.domain.UnitOfMeasure"*/-->
                                         <li th:each="ingredient : ${recipe.ingredients}"
                                             th:text="${(ingredient.getAmount() +
                                         ' ' + ingredient.uom.getDescription() +

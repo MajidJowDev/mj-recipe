@@ -15,7 +15,7 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @RequestMapping("/recipe/show/{id}")
+    @RequestMapping("/recipe/{id}/show")
     public String showById(@PathVariable String id, Model model){ // @PathVariable mathces the variables in url with the method params
 
         //model.addAttribute("recipe", recipeService.findById(new Long(id)));
@@ -24,10 +24,18 @@ public class RecipeController {
         return "recipe/show";
     }
 
-    //adding the view capability
+    //adding the view capability for data entry recipe form
     @RequestMapping("/recipe/new")
     public String newRecipe(Model model){
         model.addAttribute("recipe", new RecipeCommand());
+
+        return "recipe/recipeform";
+    }
+
+    // by adding this method we can populate the recipe form with requested data and then update it with next method
+    @RequestMapping("recipe/{id}/update")
+    public String updateRecipe(@PathVariable String id, Model model){
+        model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(id)));
 
         return "recipe/recipeform";
     }
@@ -42,7 +50,6 @@ public class RecipeController {
         RecipeCommand savedCommand = recipeService.saveRecipeCommand(command);
 
         //redirect: tells Spring MVC to redirect to a url
-        return "redirect:/recipe/show/" + savedCommand.getId();
-
+        return "redirect:/recipe/" + savedCommand.getId() +"/show";
     }
 }

@@ -94,7 +94,7 @@
                                     <li th:remove="all">1 Cup of milk</li>
                                     <li th:remove="all">1 Teaspoon of chocolate</li>
 <!--                                    <li th:each="ingredient : ${recipe.getIngredients()}" th:text="${ingredient.getAmount()} + ' ' + ${ingredient.getUom().getDescription()} + ' ' + ${ingredient.getDescription()}" >1 Teaspoon of Sugar</li>-->
-                                    <!--/*@thymesVar id="owner" type="mjzguru.com.springframework.recipe.domain.Recipe*/-->
+                                    <!--/*@thymesVar id="recipe" type="mjzguru.com.springframework.recipe.domain.Recipe*/-->
                                     <li th:each="ingredient : ${recipe.getIngredients()}" th:text="${(ingredient.getAmount()
                                         + ' ' + ingredient.getUom().getDescription()
                                         + ' - ' + ingredient.getDescription())}" >1 Teaspoon of Sugar</li>

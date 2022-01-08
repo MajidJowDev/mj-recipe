@@ -61,4 +61,14 @@ public class RecipeServiceImpl implements RecipeService {
         log.debug("Saved RecipeId:" + savedRecipe.getId());
         return recipeToRecipeCommand.convert(savedRecipe);
     }
+
+    // because we are working with Entities outside of spring, outside of transactional context
+    // , so we need to set this method as Transactional to keep these entities in the context
+    // we are doing a conversion outside the scope (the commands are not Hibernate objects nor Spring Beans)
+    // , so if we hit any lazily loaded properties our method will crash, so we expand the transactional scope to this method
+    @Override
+    @Transactional
+    public RecipeCommand findCommandById(Long id) {
+        return recipeToRecipeCommand.convert(findById(id));
+    }
 }
