@@ -1,11 +1,13 @@
 package mjzguru.com.springframework.recipe.controllers;
 
+import lombok.extern.slf4j.Slf4j;
 import mjzguru.com.springframework.recipe.commands.RecipeCommand;
 import mjzguru.com.springframework.recipe.services.RecipeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @Controller
 public class RecipeController {
 
@@ -15,6 +17,7 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
+    @GetMapping
     @RequestMapping("/recipe/{id}/show")
     public String showById(@PathVariable String id, Model model){ // @PathVariable mathces the variables in url with the method params
 
@@ -24,6 +27,7 @@ public class RecipeController {
         return "recipe/show";
     }
 
+    @GetMapping
     //adding the view capability for data entry recipe form
     @RequestMapping("/recipe/new")
     public String newRecipe(Model model){
@@ -33,6 +37,7 @@ public class RecipeController {
     }
 
     // by adding this method we can populate the recipe form with requested data and then update it with next method
+    @GetMapping
     @RequestMapping("recipe/{id}/update")
     public String updateRecipe(@PathVariable String id, Model model){
         model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(id)));
@@ -51,5 +56,15 @@ public class RecipeController {
 
         //redirect: tells Spring MVC to redirect to a url
         return "redirect:/recipe/" + savedCommand.getId() +"/show";
+    }
+
+    @GetMapping
+    @RequestMapping("recipe/{id}/delete")
+    public String deleteById(@PathVariable String id){
+
+        log.debug("Deleting id: " + id);
+
+        recipeService.deleteById(Long.valueOf(id));
+        return "redirect:/"; // redirect to root
     }
 }

@@ -14,4 +14,7 @@ public interface RecipeService {
     RecipeCommand saveRecipeCommand(RecipeCommand command);
 
     RecipeCommand findCommandById(Long id);
+
+    //unlike above methods, for methods that return void we have to imply the return type
+    void deleteById(Long idToDelete);
 }

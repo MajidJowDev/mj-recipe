@@ -76,7 +76,7 @@ public class RecipeServiceImplTest {
     }
 
     @Test
-    public void getRecipeCoomandByIdTest() throws Exception {
+    public void getRecipeCommandByIdTest() throws Exception {
         Recipe recipe = new Recipe();
         recipe.setId(1L);
         Optional<Recipe> recipeOptional = Optional.of(recipe);
@@ -93,5 +93,20 @@ public class RecipeServiceImplTest {
         assertNotNull("Null recipe returned", commandById);
         verify(recipeRepository, times(1)).findById(anyLong());
         verify(recipeRepository, never()).findAll();
+    }
+
+    @Test
+    public void deleteByIdTest() throws Exception {
+        //given, when, then are based on behaviour driven development
+        //given
+        Long idToDelete = Long.valueOf(2L);
+
+        //when
+        recipeService.deleteById(idToDelete);
+
+        //since the deleteById method has void return type we don't need 'when'
+
+        //then
+        verify(recipeRepository, times(1)).deleteById(anyLong());
     }
 }
