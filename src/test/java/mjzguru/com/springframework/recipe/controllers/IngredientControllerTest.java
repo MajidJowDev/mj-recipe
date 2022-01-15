@@ -1,13 +1,15 @@
 package mjzguru.com.springframework.recipe.controllers;
 
+import mjzguru.com.springframework.recipe.commands.IngredientCommand;
 import mjzguru.com.springframework.recipe.commands.RecipeCommand;
+import mjzguru.com.springframework.recipe.domain.Ingredient;
+import mjzguru.com.springframework.recipe.services.IngredientService;
 import mjzguru.com.springframework.recipe.services.RecipeService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -16,6 +18,10 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class IngredientControllerTest {
+
+    @Mock
+    IngredientService ingredientService;
+
     @Mock
     RecipeService recipeService;
 
@@ -27,7 +33,7 @@ public class IngredientControllerTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        ingredientController = new IngredientController(recipeService);
+        ingredientController = new IngredientController(recipeService, ingredientService);
 
         mockMvc = MockMvcBuilders.standaloneSetup(ingredientController).build();
     }
@@ -47,6 +53,20 @@ public class IngredientControllerTest {
 
         //then
         verify(recipeService, times(1)).findCommandById(anyLong());
+    }
+
+    @Test
+    public void showIngredient() throws Exception {
+
+        IngredientCommand ingredientCommand = new IngredientCommand();
+
+        when(ingredientService.findByRecipeIdAndIngredientId(anyLong(), anyLong())).thenReturn(ingredientCommand);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/ingredient/2/show"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/ingredient/show"))
+                .andExpect(model().attributeExists("ingredient"));
+
     }
 
 
