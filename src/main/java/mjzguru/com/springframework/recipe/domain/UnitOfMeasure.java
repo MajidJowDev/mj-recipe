@@ -7,7 +7,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Data
+//@Data
+@Getter
+@Setter
 @Entity
 public class UnitOfMeasure { // reference table
 

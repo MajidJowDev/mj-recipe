@@ -4,7 +4,9 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+//@Data
+@Getter
+@Setter
 @EqualsAndHashCode(exclude = {"recipe"}) // added to avoid getting into endless loop because of bi-drectional references and relations (lombok)
 @Entity
 public class Notes {
