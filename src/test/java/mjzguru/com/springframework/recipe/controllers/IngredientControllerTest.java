@@ -2,6 +2,7 @@ package mjzguru.com.springframework.recipe.controllers;
 
 import mjzguru.com.springframework.recipe.commands.IngredientCommand;
 import mjzguru.com.springframework.recipe.commands.RecipeCommand;
+import mjzguru.com.springframework.recipe.repositories.RecipeRepository;
 import mjzguru.com.springframework.recipe.services.IngredientService;
 import mjzguru.com.springframework.recipe.services.RecipeService;
 import mjzguru.com.springframework.recipe.services.UnitOfMeasureService;
@@ -39,7 +40,7 @@ public class IngredientControllerTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        ingredientController = new IngredientController(recipeService, ingredientService, unitOfMeasureService);
+        ingredientController = new IngredientController(recipeService, ingredientService, unitOfMeasureService );
 
         mockMvc = MockMvcBuilders.standaloneSetup(ingredientController).build();
     }

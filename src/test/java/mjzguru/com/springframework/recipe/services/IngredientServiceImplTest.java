@@ -106,4 +106,15 @@ public class IngredientServiceImplTest {
         verify(recipeRepository, times(1)).save(any(Recipe.class));
 
     }
+
+    @Test
+    public void deleteByIdTest() throws Exception {
+        //given
+        Long recipeId = Long.valueOf(2L);
+        Long idToDelete = Long.valueOf(9L);
+
+        //
+        
+
+    }
 }
