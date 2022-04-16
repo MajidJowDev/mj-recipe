@@ -109,12 +109,24 @@ public class IngredientServiceImplTest {
 
     @Test
     public void deleteByIdTest() throws Exception {
-        //given
-        Long recipeId = Long.valueOf(2L);
-        Long idToDelete = Long.valueOf(9L);
 
-        //
-        
+        //given
+       Recipe recipe = new Recipe();
+       Ingredient ingredient = new Ingredient();
+       ingredient.setId(3L);
+       recipe.addIngredient(ingredient);
+       ingredient.setRecipe(recipe);
+
+       Optional<Recipe> recipeOptional = Optional.of(recipe);
+
+       when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+
+       //when
+        ingredientService.deleteById(1L, 3L);
+
+        //then
+        verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository,times(1)).save(any(Recipe.class));
 
     }
 }

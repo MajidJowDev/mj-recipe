@@ -119,20 +119,31 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public void deleteById(Long recipeId, Long idToDelete) {
+
+        log.debug("Deleting ingredient:" + recipeId + ":" + idToDelete);
+
         Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
 
         if(recipeOptional.isPresent()){
             Recipe recipe = recipeOptional.get();
+            log.debug("found Recipe");
 
             Optional<Ingredient> ingredientOptional = recipe.getIngredients().stream()
                     .filter(ingredients -> ingredients.getId().equals(idToDelete))
                     .findFirst();
+
             if(ingredientOptional.isPresent()){
-                Ingredient ingredient = ingredientOptional.get();
-                recipe.getIngredients().remove(ingredient);
+                log.debug("Ingredient found");
+                Ingredient ingredientToDelete = ingredientOptional.get();
+                // remember to use both next two lines (their logic) for deleting an object which is related to another obj...
+                // if we just use the remove the object won't be deleted
+                ingredientToDelete.setRecipe(null);// this will cause hibernate to delete the ingredient from db
+                recipe.getIngredients().remove(ingredientOptional.get()); // this will cause hibernate to delete the ingredient from db
 
                 recipeRepository.save(recipe);
             }
+        } else {
+            log.debug("Recipe Id not found: " + recipeId);
         }
     }
 
