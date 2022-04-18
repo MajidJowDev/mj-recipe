@@ -17,8 +17,9 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @GetMapping
-    @RequestMapping("/recipe/{id}/show")
+    //@GetMapping
+    //@RequestMapping("/recipe/{id}/show") // we do not need to use both GetMapping and @RequestMapping we can combine them in one annotation
+    @GetMapping("/recipe/{id}/show")
     public String showById(@PathVariable String id, Model model){ // @PathVariable mathces the variables in url with the method params
 
         //model.addAttribute("recipe", recipeService.findById(new Long(id)));
@@ -27,9 +28,10 @@ public class RecipeController {
         return "recipe/show";
     }
 
-    @GetMapping
     //adding the view capability for data entry recipe form
-    @RequestMapping("/recipe/new")
+    //@GetMapping
+    //@RequestMapping("/recipe/new")
+    @GetMapping("/recipe/new")
     public String newRecipe(Model model){
         model.addAttribute("recipe", new RecipeCommand());
 
@@ -37,8 +39,9 @@ public class RecipeController {
     }
 
     // by adding this method we can populate the recipe form with requested data and then update it with next method
-    @GetMapping
-    @RequestMapping("recipe/{id}/update")
+    //@GetMapping
+    //@RequestMapping("recipe/{id}/update")
+    @GetMapping("recipe/{id}/update")
     public String updateRecipe(@PathVariable String id, Model model){
         model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(id)));
 
@@ -47,8 +50,9 @@ public class RecipeController {
 
     //adding the post back
     //@RequestMapping(name = "recipe", method = RequestMethod.POST)
-    @PostMapping
-    @RequestMapping( "recipe")
+//    @PostMapping
+//    @RequestMapping( "recipe")
+    @PostMapping( "recipe")
     public String saveOrUpdate(@ModelAttribute RecipeCommand command){
         // ModelAttribute tells spring to bind form post parameters to RecipeCommand object and
         //it will happen automatically by the naming convention of props that we did in the form
@@ -58,8 +62,9 @@ public class RecipeController {
         return "redirect:/recipe/" + savedCommand.getId() +"/show";
     }
 
-    @GetMapping
-    @RequestMapping("recipe/{id}/delete")
+//    @GetMapping
+//    @RequestMapping("recipe/{id}/delete")
+    @GetMapping("recipe/{id}/delete")
     public String deleteById(@PathVariable String id){
 
         log.debug("Deleting id: " + id);
