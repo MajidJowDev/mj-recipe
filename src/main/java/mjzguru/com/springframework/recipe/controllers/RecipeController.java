@@ -80,13 +80,15 @@ public class RecipeController {
     // (set this status code with upper priority otherwise the real status code would be 200 instead of 404)
     @ExceptionHandler(NotFoundException.class) // this annotation works at controller level (can be used with @ResponseStatus for just returning a http status)
     // here we are saying that we are going to use the "NotFoundException" class
-    public ModelAndView handleNotFound() {
+    public ModelAndView handleNotFound(Exception exception) { // we can add the Exception argument so that we can pass in the exception object (info) to the class
 
         log.error("Handling not found exception!");
+        log.error(exception.getMessage());
 
         ModelAndView modelAndView = new ModelAndView();
 
         modelAndView.setViewName("404error"); // should be set according to our html error page so the ThymeLeaf template engine take it and render it
+        modelAndView.addObject("exception", exception); // added to display the exception info on the ErrorPage
 
         return modelAndView;
     }
