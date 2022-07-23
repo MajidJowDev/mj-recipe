@@ -4,6 +4,7 @@ import mjzguru.com.springframework.recipe.commands.RecipeCommand;
 import mjzguru.com.springframework.recipe.converters.RecipeCommandToRecipe;
 import mjzguru.com.springframework.recipe.converters.RecipeToRecipeCommand;
 import mjzguru.com.springframework.recipe.domain.Recipe;
+import mjzguru.com.springframework.recipe.exceptions.NotFoundException;
 import mjzguru.com.springframework.recipe.repositories.RecipeRepository;
 
 
@@ -55,6 +56,15 @@ public class RecipeServiceImplTest {
         assertNotNull("Null recipe returned", recipeReturned);
         verify(recipeRepository, times(1)).findById(anyLong());
         verify(recipeRepository, never()).findAll();
+    }
+
+    @Test(expected = NotFoundException.class) // expects calling the NotFoundException when the recipe not found (if the optional comes back empty)
+    public void getRecipeByIdTestNotFound() throws Exception {
+        Optional<Recipe> recipeOptional = Optional.empty();
+
+        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+
+        Recipe recipeReturned = recipeService.findById(1L);
     }
 
     @Test

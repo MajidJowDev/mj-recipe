@@ -5,6 +5,7 @@ import mjzguru.com.springframework.recipe.commands.RecipeCommand;
 import mjzguru.com.springframework.recipe.converters.RecipeCommandToRecipe;
 import mjzguru.com.springframework.recipe.converters.RecipeToRecipeCommand;
 import mjzguru.com.springframework.recipe.domain.Recipe;
+import mjzguru.com.springframework.recipe.exceptions.NotFoundException;
 import mjzguru.com.springframework.recipe.repositories.RecipeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +45,8 @@ public class RecipeServiceImpl implements RecipeService {
         Optional<Recipe> recipeOptional = recipeRepository.findById(id);
 
         if(!recipeOptional.isPresent()){
-            throw new RuntimeException("Recipe Not Found!");
+            //throw new RuntimeException("Recipe Not Found!"); // if we use this exception the test will go boom
+            throw new NotFoundException("Recipe Not Found!");
         }
 
         return recipeOptional.get();

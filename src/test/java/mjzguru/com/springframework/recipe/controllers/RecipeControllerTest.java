@@ -2,6 +2,7 @@ package mjzguru.com.springframework.recipe.controllers;
 
 import mjzguru.com.springframework.recipe.commands.RecipeCommand;
 import mjzguru.com.springframework.recipe.domain.Recipe;
+import mjzguru.com.springframework.recipe.exceptions.NotFoundException;
 import mjzguru.com.springframework.recipe.services.RecipeService;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,6 +55,17 @@ public class RecipeControllerTest {
                 .andExpect(view().name("recipe/show"))
                 .andExpect(model().attributeExists("recipe"));
 
+    }
+
+    @Test
+    public void getRecipeNotFoundTest() throws Exception {
+        Recipe recipe = new Recipe(); // I do not think that this initiation is actually required
+        recipe.setId(1L);
+
+        when(recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/show"))
+                .andExpect(status().isNotFound());
     }
 
     @Test
