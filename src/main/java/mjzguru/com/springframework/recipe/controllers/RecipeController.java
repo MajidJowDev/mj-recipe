@@ -92,4 +92,20 @@ public class RecipeController {
 
         return modelAndView;
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NumberFormatException.class)
+    public ModelAndView handleNumberFormat(Exception exception) { // here we do not need to implement NumberFormat Exception for the Recipe
+        // service the exception param will be filled with default sys message
+
+        log.error("Handling Number Format exception!");
+        log.error(exception.getMessage());
+
+        ModelAndView modelAndView = new ModelAndView();
+
+        modelAndView.setViewName("400error"); // for bad request we should use status code 400
+        modelAndView.addObject("exception", exception); // added to display the exception info on the ErrorPage
+
+        return modelAndView;
+    }
 }

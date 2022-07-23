@@ -70,6 +70,14 @@ public class RecipeControllerTest {
     }
 
     @Test
+    public void getRecipeNumberFormatExceptionTest() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/asdsad1/show"))
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name("400error"));
+    }
+
+    @Test
     public void getNewRecipeFormTest() throws Exception{
         RecipeCommand command = new RecipeCommand();
 
