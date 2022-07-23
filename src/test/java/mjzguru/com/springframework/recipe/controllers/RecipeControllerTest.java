@@ -59,13 +59,14 @@ public class RecipeControllerTest {
 
     @Test
     public void getRecipeNotFoundTest() throws Exception {
-        Recipe recipe = new Recipe(); // I do not think that this initiation is actually required
-        recipe.setId(1L);
+        //Recipe recipe = new Recipe(); // I do not think that this initiation is actually required
+        //recipe.setId(1L);
 
         when(recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/show"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("404error"));
     }
 
     @Test

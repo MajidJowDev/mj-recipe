@@ -2,10 +2,13 @@ package mjzguru.com.springframework.recipe.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 import mjzguru.com.springframework.recipe.commands.RecipeCommand;
+import mjzguru.com.springframework.recipe.exceptions.NotFoundException;
 import mjzguru.com.springframework.recipe.services.RecipeService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @Controller
@@ -71,5 +74,20 @@ public class RecipeController {
 
         recipeService.deleteById(Long.valueOf(id));
         return "redirect:/"; // redirect to root
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND) // add this so that this Status code precedences the default status code
+    // (set this status code with upper priority otherwise the real status code would be 200 instead of 404)
+    @ExceptionHandler(NotFoundException.class) // this annotation works at controller level (can be used with @ResponseStatus for just returning a http status)
+    // here we are saying that we are going to use the "NotFoundException" class
+    public ModelAndView handleNotFound() {
+
+        log.error("Handling not found exception!");
+
+        ModelAndView modelAndView = new ModelAndView();
+
+        modelAndView.setViewName("404error"); // should be set according to our html error page so the ThymeLeaf template engine take it and render it
+
+        return modelAndView;
     }
 }
