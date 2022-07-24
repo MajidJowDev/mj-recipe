@@ -106,7 +106,7 @@ public class RecipeControllerTest {
                 .andExpect(view().name("redirect:/recipe/2/show"));
     }
 
-   /* @Test
+    @Test
     public void postNewRecipeFormValidationFailTest() throws Exception {
         RecipeCommand command = new RecipeCommand();
         command.setId(2L);
@@ -116,12 +116,13 @@ public class RecipeControllerTest {
         mockMvc.perform(post("/recipe")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("id", "")
+                        .param("cookTime", "3000")
 
                 )
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("recipe"))
                 .andExpect(view().name("recipe/recipeform"));
-    }*/
+    }
 
     @Test
     public void getUpdateViewTest() throws Exception {
