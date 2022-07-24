@@ -7,13 +7,17 @@ import mjzguru.com.springframework.recipe.services.RecipeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 
 @Slf4j
 @Controller
 public class RecipeController {
 
+    private static final String RECIPE_RECIPEFORM_URL = "recipe/recipeform";
     private final RecipeService recipeService;
 
     public RecipeController(RecipeService recipeService) {
@@ -38,7 +42,7 @@ public class RecipeController {
     public String newRecipe(Model model){
         model.addAttribute("recipe", new RecipeCommand());
 
-        return "recipe/recipeform";
+        return RECIPE_RECIPEFORM_URL;
     }
 
     // by adding this method we can populate the recipe form with requested data and then update it with next method
@@ -48,7 +52,7 @@ public class RecipeController {
     public String updateRecipe(@PathVariable String id, Model model){
         model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(id)));
 
-        return "recipe/recipeform";
+        return RECIPE_RECIPEFORM_URL;
     }
 
     //adding the post back
@@ -56,9 +60,17 @@ public class RecipeController {
 //    @PostMapping
 //    @RequestMapping( "recipe")
     @PostMapping( "recipe")
-    public String saveOrUpdate(@ModelAttribute RecipeCommand command){
+    public String saveOrUpdate(@Valid @ModelAttribute("recipe") RecipeCommand command, BindingResult bindingResult){
         // ModelAttribute tells spring to bind form post parameters to RecipeCommand object and
         //it will happen automatically by the naming convention of props that we did in the form
+
+        if(bindingResult.hasErrors()){ // added to handle validation messages a
+            bindingResult.getAllErrors().forEach(objectError -> {
+                log.debug(objectError.toString());
+            });
+
+            return RECIPE_RECIPEFORM_URL;
+        }
         RecipeCommand savedCommand = recipeService.saveRecipeCommand(command);
 
         //redirect: tells Spring MVC to redirect to a url
