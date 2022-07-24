@@ -43,7 +43,7 @@
 <!--                                added to display error descriptions in columns the '#fields' property is tied to the BindingResult in the saveOrUpdate method in RecipeController-->
                                 <div class="col-md-3 form-group" th:class="${#fields.hasErrors('description')}
                                 ? 'col-md-3 form-group has-error' : 'col-md-3 form-group'">
-                                    <label>Recipe Description:</label>
+                                    <label th:text="#{recipe.description}">Recipe Description:</label>
 <!--                                    the star before curly braces implies that everything we are using in form tag are going to use recipe obj-->
 <!--                                    eg. recipe.description-->
                                     <input type="text" class="form-control" th:field="*{description}" th:errorclass="has-error"/>
