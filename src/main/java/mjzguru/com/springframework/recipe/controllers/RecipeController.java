@@ -63,6 +63,8 @@ public class RecipeController {
     public String saveOrUpdate(@Valid @ModelAttribute("recipe") RecipeCommand command, BindingResult bindingResult){
         // ModelAttribute tells spring to bind form post parameters to RecipeCommand object and
         //it will happen automatically by the naming convention of props that we did in the form
+        // also another important thing is that the BindingResult is tied to the #fields property in thymeleaf in html page (view)
+        // and Thymeleaf and spring are integrated this way (for error/validation handling)
 
         if(bindingResult.hasErrors()){ // added to handle validation messages a
             bindingResult.getAllErrors().forEach(objectError -> {
