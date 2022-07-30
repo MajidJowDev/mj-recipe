@@ -17,6 +17,7 @@ import java.util.*;
 
 @Slf4j
 @Component
+@Profile("default")
 public class DataLoader implements CommandLineRunner, ApplicationListener<ContextRefreshedEvent> {
 
     private final RecipeRepository recipeRepository;

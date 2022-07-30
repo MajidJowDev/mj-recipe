@@ -3,6 +3,7 @@ spring:
     url: jdbc:mysql://localhost:3306/sfg_dev
     username: sfg_dev_user
     password: guru
+    platform: mysql
   jpa:
     hibernate:
       ddl-auto: validate #makes hibernate to check the schema and see if it is as expected
@@ -23,6 +24,6 @@ spring:
 #                  action: create
 #                  create-target: guru_database_create.sql
 
-  sql:
-    init:
-      mode: never #to initiate data to Mysql/h2 always (if we use MySql Only enable always one time for initiation and then set it to never)
+#  sql:
+#    init:
+#      mode: never #to initiate data to Mysql/h2 always (if we use MySql Only enable always one time for initiation and then set it to never)
