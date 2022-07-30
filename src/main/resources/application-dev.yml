@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/sfg_dev
+    username: sfg_dev_user
+    password: guru
+  jpa:
+    hibernate:
+      ddl-auto: validate #makes hibernate to check the schema and see if it is as expected
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database: mysql
+    show-sql: true #enables us to see the sql statements in the console as they run in the application
+
+    # we also should set the Active Profiles in application configurations to 'dev'
