@@ -9,5 +9,20 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     database: mysql
     show-sql: true #enables us to see the sql statements in the console as they run in the application
-
     # we also should set the Active Profiles in application configurations to 'dev'
+#    properties:
+      #adding properties for persistence (schema generation) using a 'metadata' create source to do a reflection upon the domain entities
+      # and set the ddl create script targets to 'guru_database_create.sql'...
+      # this whole property settings is going to create the SQL file in project root for us
+      # so we can run this sql file in MySQL and generate the db tables and relations
+#          javax:
+#            persistence:
+#              schema-generation:
+#                create-source: metadata
+#                scripts:
+#                  action: create
+#                  create-target: guru_database_create.sql
+
+  sql:
+    init:
+      mode: never #to initiate data to Mysql/h2 always (if we use MySql Only enable always one time for initiation and then set it to never)
