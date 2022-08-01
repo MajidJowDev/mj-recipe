@@ -8,22 +8,14 @@ import java.math.BigDecimal;
 //@Data
 @Getter
 @Setter
-@EqualsAndHashCode(exclude = {"recipe"}) // added to avoid getting into endless loop because of bi-drectional references and relations (lombok)
-@Entity
 public class Ingredient {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private String description;
     private BigDecimal amount;
 
-    @OneToOne(fetch = FetchType.EAGER) // the default fetch type is Eager but I explicitly define the rel as Eager for learning purpose
     private UnitOfMeasure uom;
-
-    @ManyToOne
     private Recipe recipe;
-
 
     public Ingredient() {
     }

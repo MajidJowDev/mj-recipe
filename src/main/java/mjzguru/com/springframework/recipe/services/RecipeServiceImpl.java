@@ -41,7 +41,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Recipe findById(Long id) {
+    public Recipe findById(String id) {
         Optional<Recipe> recipeOptional = recipeRepository.findById(id);
 
         if(!recipeOptional.isPresent()){
@@ -70,12 +70,12 @@ public class RecipeServiceImpl implements RecipeService {
     // , so if we hit any lazily loaded properties our method will crash, so we expand the transactional scope to this method
     @Override
     @Transactional
-    public RecipeCommand findCommandById(Long id) {
+    public RecipeCommand findCommandById(String id) {
         return recipeToRecipeCommand.convert(findById(id));
     }
 
     @Override
-    public void deleteById(Long idToDelete) {
+    public void deleteById(String idToDelete) {
         recipeRepository.deleteById(idToDelete);
     }
 }

@@ -1,4 +1,4 @@
-package mjzguru.com.springframework.recipe.services;
+/*package mjzguru.com.springframework.recipe.services;
 
 import mjzguru.com.springframework.recipe.commands.RecipeCommand;
 import mjzguru.com.springframework.recipe.converters.RecipeCommandToRecipe;
@@ -39,6 +39,7 @@ public class RecipeServiceIT {
 
     // because we are working with Entities outside of spring, outside of transactional context
     // , so we need to set this method as Transactional to keep these entities in the context
+
     @Transactional
     @Test
     public void testSaveOfDescription() throws Exception {
@@ -57,4 +58,7 @@ public class RecipeServiceIT {
         assertEquals(testRecipe.getCategories().size(), savedRecipeCommand.getCategories().size());
         assertEquals(testRecipe.getIngredients().size(), savedRecipeCommand.getIngredients().size());
     }
+
 }
+
+ */

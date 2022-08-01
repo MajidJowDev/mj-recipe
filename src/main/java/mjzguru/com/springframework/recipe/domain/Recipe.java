@@ -15,47 +15,27 @@ import java.util.Set;
 // Refactor menu, and remove the simple getters and setters ourselves.
 @Getter
 @Setter
-@Entity
 public class Recipe {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private String id;
     private String description;
     private Integer prepTime;
     private Integer cookTime;
     private Integer servings;
     private String source;
     private String url;
-
-    @Lob
     private String directions;
-
-    // ORDINAL saves the index numbers in db But STRING saves the name in db
-    @Enumerated(EnumType.STRING) // EnumType.ORDINAL did not used because of the possibilty of corruption in enum indexes (in case of adding a new value in the middle of other enum values)
-    private Difficulty difficulty;
-
-    // the default cascade action is NONE
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe") // mappedBy is the relation property on child class (Ingredients) on each object of Ingredient there will be a "recipe" property
     private Set<Ingredient> ingredients = new HashSet<>();
-
-    @Lob
     private Byte[] image;
-
-    @OneToOne(cascade = CascadeType.ALL)
+    private Difficulty difficulty;
     private Notes notes;
 
-    @ManyToMany
-    @JoinTable(name = "recipe_category",
-            joinColumns = @JoinColumn(name = "recipe_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
-
 
     public void setNotes(Notes notes) {
         if (notes != null) {
             this.notes = notes;
-            notes.setRecipe(this);  // added to make di-directional relation easier
+            notes.setRecipe(this);
         }
     }
 

@@ -71,7 +71,7 @@ public class IndexControllerTest {
         recipes.add(new Recipe());
         //recipes.add(new Recipe()); // removed because java take it as an equal object as the object in above line and merge them as one Object
         Recipe recipe = new Recipe();
-        recipe.setId(1L);
+        recipe.setId("1");
         recipes.add(recipe);
 
         when(recipeService.getRecipes()).thenReturn(recipes);

@@ -11,8 +11,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 class RecipeApplicationTests {
 
+    /*
     @Test
     void contextLoads() {
     }
+    */
 
 }

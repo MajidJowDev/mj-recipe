@@ -1,3 +1,4 @@
+/*
 package mjzguru.com.springframework.recipe.repositories;
 
 import mjzguru.com.springframework.recipe.domain.UnitOfMeasure;
@@ -37,3 +38,4 @@ public class UnitOfMeasureRepositoryTest {
         assertEquals("Cup", uomOptional.get().getDescription());
     }
 }
+*/

@@ -11,17 +11,10 @@ import java.util.Set;
       // Refactor menu, and remove the simple getters and setters ourselves.
 @Getter
 @Setter
-@EqualsAndHashCode(exclude = {"recipes"}) // added to avoid getting into endless loop because of bi-drectional references and relations (lombok)
-@Entity
 public class Category {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    //private String catDescription; // Hibernate data initializer does not accept upper case in column names (naming strategies) so this prop should be refactored to "cat_description" or "description"
+    private String id;
     private String description;
-
-    @ManyToMany(mappedBy = "categories")
     private Set<Recipe> recipes;
 
 }

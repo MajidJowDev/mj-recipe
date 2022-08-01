@@ -33,7 +33,7 @@ public class IngredientController {
         log.debug("Getting ingredients list for Recipe Id: " + recipeId);
 
         // use command object to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(recipeId)));
+        model.addAttribute("recipe", recipeService.findCommandById(recipeId));
 
         return "recipe/ingredient/list";
     }
@@ -43,7 +43,7 @@ public class IngredientController {
     @GetMapping("recipe/{recipeId}/ingredient/{id}/show")
     public  String showRecipeIngredient(@PathVariable String recipeId, @PathVariable String id, Model model ) {
 
-        model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(Long.valueOf(recipeId), Long.valueOf(id)));
+        model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, id));
 
         return "recipe/ingredient/show";
     }
@@ -56,13 +56,13 @@ public class IngredientController {
 
         // first we need to get the id of the recipe we want to add ingredient to
         //make sure we have a good id value
-        RecipeCommand recipeCommand = recipeService.findCommandById(Long.valueOf(recipeId));
+        RecipeCommand recipeCommand = recipeService.findCommandById(recipeId);
         //todo raise exception if null
 
         // since the new ingredient is a detail of recipe, so we need to set the recipe id to this ingredient as Foreign Key
         //need to return back parent id for hidden form property
         IngredientCommand ingredientCommand = new IngredientCommand();
-        ingredientCommand.setRecipeId(Long.valueOf(recipeId));
+        ingredientCommand.setRecipeId(recipeId);
         model.addAttribute("ingredient", ingredientCommand); // after initiation of new ingredient we need to give it to the model
 
         //init uom
@@ -78,7 +78,7 @@ public class IngredientController {
     @GetMapping("recipe/{recipeId}/ingredient/{id}/update")
     public String updateRecipeIngredient(@PathVariable String recipeId, @PathVariable String id, Model model) {
 
-        model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(Long.valueOf(recipeId), Long.valueOf(id)));
+        model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, id));
 
         model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
 
@@ -105,7 +105,7 @@ public class IngredientController {
 
         log.debug("Deleting Ingredient Id:" + id);
 
-        ingredientService.deleteById(Long.valueOf(recipeId), Long.valueOf(id));
+        ingredientService.deleteById(recipeId, id);
         return "redirect:/recipe/"+ recipeId + "/ingredients";
 
     }
