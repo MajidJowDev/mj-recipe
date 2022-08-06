@@ -137,7 +137,7 @@ public class IngredientServiceImpl implements IngredientService {
                 Ingredient ingredientToDelete = ingredientOptional.get();
                 // remember to use both next two lines (their logic) for deleting an object which is related to another obj...
                 // if we just use the remove the object won't be deleted
-                ingredientToDelete.setRecipe(null);// this will cause hibernate to delete the ingredient from db
+                //ingredientToDelete.setRecipe(null);// this will cause hibernate to delete the ingredient from db
                 recipe.getIngredients().remove(ingredientOptional.get()); // this will cause hibernate to delete the ingredient from db
 
                 recipeRepository.save(recipe);

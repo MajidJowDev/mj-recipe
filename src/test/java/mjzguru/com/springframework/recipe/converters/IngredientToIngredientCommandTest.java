@@ -42,7 +42,7 @@ public class IngredientToIngredientCommandTest {
         //given
         Ingredient ingredient = new Ingredient();
         ingredient.setId(ID_VALUE);
-        ingredient.setRecipe(RECIPE);
+        //ingredient.setRecipe(RECIPE); // removed to avoid circular dependency in Mongo docs
         ingredient.setAmount(AMOUNT);
         ingredient.setDescription(DESCRIPTION);
         ingredient.setUom(null);
@@ -61,7 +61,7 @@ public class IngredientToIngredientCommandTest {
         //given
         Ingredient ingredient = new Ingredient();
         ingredient.setId(ID_VALUE);
-        ingredient.setRecipe(RECIPE);
+        //ingredient.setRecipe(RECIPE); // removed to avoid circular dependency in Mongo docs
         ingredient.setAmount(AMOUNT);
         ingredient.setDescription(DESCRIPTION);
 

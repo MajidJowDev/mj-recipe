@@ -62,7 +62,7 @@ public class IngredientController {
         // since the new ingredient is a detail of recipe, so we need to set the recipe id to this ingredient as Foreign Key
         //need to return back parent id for hidden form property
         IngredientCommand ingredientCommand = new IngredientCommand();
-        ingredientCommand.setRecipeId(recipeId);
+        //ingredientCommand.setRecipeId(recipeId); // since we do not have any relation in NoSQL dbs we need to comment this part
         model.addAttribute("ingredient", ingredientCommand); // after initiation of new ingredient we need to give it to the model
 
         //init uom
@@ -92,7 +92,7 @@ public class IngredientController {
     public String saveOrUpdate(@ModelAttribute IngredientCommand command){
         IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command);
 
-        log.debug("saved receipe id:" + savedCommand.getRecipeId());
+        //log.debug("saved receipe id:" + savedCommand.getRecipeId()); // since we do not have any relation in NoSQL dbs we need to comment this part
         log.debug("saved ingredient id:" + savedCommand.getId());
 
         return "redirect:/recipe/" + savedCommand.getRecipeId() + "/ingredient/" + savedCommand.getId() + "/show";

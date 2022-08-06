@@ -42,10 +42,64 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
     @Transactional // to avoid getting lazy initiation exception
     public void onApplicationEvent(ContextRefreshedEvent event) {
         //System.out.println("Data Loaded by Guru's Profile");
+        loadCategories();
+        loadUom();
         log.info("Data loaded in DataLoader class by Guru Method!!!!");
 
         recipeRepository.saveAll(getRecipes());
         log.debug("getRecipes Method Called Successfully!!!!****");
+    }
+
+    private void loadCategories(){
+        Category cat1 = new Category();
+        cat1.setDescription("American");
+        categoryRepository.save(cat1);
+
+        Category cat2 = new Category();
+        cat2.setDescription("Italian");
+        categoryRepository.save(cat2);
+
+        Category cat3 = new Category();
+        cat3.setDescription("Mexican");
+        categoryRepository.save(cat3);
+
+        Category cat4 = new Category();
+        cat4.setDescription("Fast Food");
+        categoryRepository.save(cat4);
+    }
+
+    private void loadUom(){
+        UnitOfMeasure uom1 = new UnitOfMeasure();
+        uom1.setDescription("Teaspoon");
+        unitOfMeasureRepository.save(uom1);
+
+        UnitOfMeasure uom2 = new UnitOfMeasure();
+        uom2.setDescription("Tablespoon");
+        unitOfMeasureRepository.save(uom2);
+
+        UnitOfMeasure uom3 = new UnitOfMeasure();
+        uom3.setDescription("Cup");
+        unitOfMeasureRepository.save(uom3);
+
+        UnitOfMeasure uom4 = new UnitOfMeasure();
+        uom4.setDescription("Pinch");
+        unitOfMeasureRepository.save(uom4);
+
+        UnitOfMeasure uom5 = new UnitOfMeasure();
+        uom5.setDescription("Ounce");
+        unitOfMeasureRepository.save(uom5);
+
+        UnitOfMeasure uom6 = new UnitOfMeasure();
+        uom6.setDescription("Each");
+        unitOfMeasureRepository.save(uom6);
+
+        UnitOfMeasure uom7 = new UnitOfMeasure();
+        uom7.setDescription("Pint");
+        unitOfMeasureRepository.save(uom7);
+
+        UnitOfMeasure uom8 = new UnitOfMeasure();
+        uom8.setDescription("Dash");
+        unitOfMeasureRepository.save(uom8);
     }
 
     private void loadRecipesData(){
@@ -82,7 +136,7 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
 
         //2 ripe avocados
         Ingredient ingAvocado = new Ingredient();
-        ingAvocado.setRecipe(guacamole);
+        //ingAvocado.setRecipe(guacamole);
         ingAvocado.setAmount(BigDecimal.valueOf(2));
         ingAvocado.setDescription("ripe avocados");
         ingAvocado.setUom(uomQty.get());
@@ -90,7 +144,7 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
 
         //1/4 teaspoon salt, plus more to taste
         Ingredient ingSalt = new Ingredient();
-        ingSalt.setRecipe(guacamole);
+        //ingSalt.setRecipe(guacamole);
         ingSalt.setAmount(BigDecimal.valueOf(0.25));
         ingSalt.setDescription("salt, plus more to taste");
         ingSalt.setUom(uomTeaspoon.get());
@@ -98,7 +152,7 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
 
         //1 tablespoon fresh lime or lemon juice
         Ingredient ingLemon = new Ingredient();
-        ingLemon.setRecipe(guacamole);
+        //ingLemon.setRecipe(guacamole);
         ingLemon.setAmount(BigDecimal.valueOf(1));
         ingLemon.setDescription("fresh lime or lemon juice");
         ingLemon.setUom(uomTablespoon.get());
@@ -106,7 +160,7 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
 
         //2-4 tablespoons minced red onion or thinly sliced green onion
         Ingredient ingOnion = new Ingredient();
-        ingOnion.setRecipe(guacamole);
+        //ingOnion.setRecipe(guacamole);
         ingOnion.setAmount(BigDecimal.valueOf(4));
         ingOnion.setDescription("minced red onion or thinly sliced green onion");
         ingOnion.setUom(uomTablespoon.get());
@@ -114,7 +168,7 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
 
         //1-2 serrano (or jalapeño) chilis, stems and seeds removed, minced
         Ingredient ingSerrano = new Ingredient();
-        ingSerrano.setRecipe(guacamole);
+        //ingSerrano.setRecipe(guacamole);
         ingSerrano.setAmount(BigDecimal.valueOf(2));
         ingSerrano.setDescription("serrano (or jalapeño) chilis, stems and seeds removed, minced");
         ingSerrano.setUom(uomQty.get());
@@ -122,7 +176,7 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
 
         //2 tablespoons cilantro (leaves and tender stems), finely chopped
         Ingredient ingCilantro = new Ingredient();
-        ingCilantro.setRecipe(guacamole);
+        //ingCilantro.setRecipe(guacamole);
         ingCilantro.setAmount(BigDecimal.valueOf(2));
         ingCilantro.setDescription("cilantro (leaves and tender stems), finely chopped");
         ingCilantro.setUom(uomTablespoon.get());
@@ -130,7 +184,7 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
 
         //Pinch freshly ground black pepper
         Ingredient ingBlackPepper = new Ingredient();
-        ingBlackPepper.setRecipe(guacamole);
+        //ingBlackPepper.setRecipe(guacamole);
         ingBlackPepper.setAmount(BigDecimal.valueOf(1));
         ingBlackPepper.setDescription("freshly ground black pepper");
         ingBlackPepper.setUom(uomPinch.get());
@@ -138,7 +192,7 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
 
         //1/2 ripe tomato, chopped (optional)
         Ingredient ingTomato = new Ingredient();
-        ingTomato.setRecipe(guacamole);
+        //ingTomato.setRecipe(guacamole);
         ingTomato.setAmount(BigDecimal.valueOf(0.5));
         ingTomato.setDescription("ripe tomato, chopped (optional)");
         ingTomato.setUom(uomQty.get());
@@ -146,7 +200,7 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
 
         //Red radish or jicama slices for garnish (optional)
         Ingredient ingRadish = new Ingredient();
-        ingRadish.setRecipe(guacamole);
+        //ingRadish.setRecipe(guacamole);
         ingRadish.setAmount(BigDecimal.valueOf(1));
         ingRadish.setDescription("Red radish or jicama slices for garnish (optional)");
         ingRadish.setUom(uomQty.get());
@@ -154,7 +208,7 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
 
         //Tortilla chips, to serve
         Ingredient ingTortilla = new Ingredient();
-        ingTortilla.setRecipe(guacamole);
+        //ingTortilla.setRecipe(guacamole);
         ingTortilla.setAmount(BigDecimal.valueOf(0.2));
         ingTortilla.setDescription("Tortilla chips, to serve");
         ingTortilla.setUom(uomPound.get());
@@ -162,7 +216,7 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
 
         Notes guacamoleNotes = new Notes();
         guacamoleNotes.setRecipeNotes("Be careful handling chilis! If using, it's best to wear food-safe gloves. If no gloves are available, wash your hands thoroughly after handling, and do not touch your eyes or the area near your eyes for several hours afterwards.");
-        guacamoleNotes.setRecipe(guacamole);
+        //guacamoleNotes.setRecipe(guacamole);
         guacamole.setNotes(guacamoleNotes);
 
         recipeRepository.save(guacamole);
@@ -185,7 +239,7 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
 
         // 2 tablespoons ancho chili powder
         Ingredient chicken_Ancho = new Ingredient();
-        chicken_Ancho.setRecipe(spicyGrilledChicken);
+        //chicken_Ancho.setRecipe(spicyGrilledChicken);
         chicken_Ancho.setAmount(BigDecimal.valueOf(2));
         chicken_Ancho.setDescription("ancho chili powder");
         chicken_Ancho.setUom(uomTablespoon.get());
@@ -193,7 +247,7 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
 
         //1 teaspoon dried oregano
         Ingredient chicken_Oregano = new Ingredient();
-        chicken_Oregano.setRecipe(spicyGrilledChicken);
+        //chicken_Oregano.setRecipe(spicyGrilledChicken);
         chicken_Oregano.setAmount(BigDecimal.valueOf(1));
         chicken_Oregano.setDescription("dried oregano");
         chicken_Oregano.setUom(uomTeaspoon.get());
@@ -201,7 +255,7 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
 
         //1 teaspoon dried cumin
         Ingredient chicken_Cumin = new Ingredient();
-        chicken_Cumin.setRecipe(spicyGrilledChicken);
+        //chicken_Cumin.setRecipe(spicyGrilledChicken);
         chicken_Cumin.setAmount(BigDecimal.valueOf(1));
         chicken_Cumin.setDescription("dried cumin");
         chicken_Cumin.setUom(uomTeaspoon.get());
@@ -209,7 +263,7 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
 
         //1 teaspoon sugar
         Ingredient chicken_Sugar = new Ingredient();
-        chicken_Sugar.setRecipe(spicyGrilledChicken);
+        //chicken_Sugar.setRecipe(spicyGrilledChicken);
         chicken_Sugar.setAmount(BigDecimal.valueOf(1));
         chicken_Sugar.setDescription("sugar");
         chicken_Sugar.setUom(uomTeaspoon.get());
@@ -217,7 +271,7 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
 
         //1/2 teaspoon salt
         Ingredient chicken_Salt = new Ingredient();
-        chicken_Salt.setRecipe(spicyGrilledChicken);
+        //chicken_Salt.setRecipe(spicyGrilledChicken);
         chicken_Salt.setAmount(BigDecimal.valueOf(0.5));
         chicken_Salt.setDescription("salt");
         chicken_Salt.setUom(uomTeaspoon.get());
@@ -225,7 +279,7 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
 
         //1 clove garlic, finely chopped
         Ingredient chicken_Garlic = new Ingredient();
-        chicken_Garlic.setRecipe(spicyGrilledChicken);
+        //chicken_Garlic.setRecipe(spicyGrilledChicken);
         chicken_Garlic.setAmount(BigDecimal.valueOf(1));
         chicken_Garlic.setDescription("clove garlic, finely chopped");
         chicken_Garlic.setUom(uomQty.get());
@@ -233,7 +287,7 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
 
         //1 tablespoon finely grated orange zest
         Ingredient chicken_Orange = new Ingredient();
-        chicken_Orange.setRecipe(spicyGrilledChicken);
+        //chicken_Orange.setRecipe(spicyGrilledChicken);
         chicken_Orange.setAmount(BigDecimal.valueOf(1));
         chicken_Orange.setDescription("finely grated orange zest");
         chicken_Orange.setUom(uomTablespoon.get());
@@ -241,7 +295,7 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
 
         //3 tablespoons fresh-squeezed orange juice
         Ingredient chicken_OrangeJucie = new Ingredient();
-        chicken_OrangeJucie.setRecipe(spicyGrilledChicken);
+        //chicken_OrangeJucie.setRecipe(spicyGrilledChicken);
         chicken_OrangeJucie.setAmount(BigDecimal.valueOf(3));
         chicken_OrangeJucie.setDescription("fresh-squeezed orange juice");
         chicken_OrangeJucie.setUom(uomTablespoon.get());
@@ -249,7 +303,7 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
 
         //2 tablespoons olive oil
         Ingredient chicken_OliveOil = new Ingredient();
-        chicken_OliveOil.setRecipe(spicyGrilledChicken);
+        //chicken_OliveOil.setRecipe(spicyGrilledChicken);
         chicken_OliveOil.setAmount(BigDecimal.valueOf(2));
         chicken_OliveOil.setDescription("olive oil");
         chicken_OliveOil.setUom(uomTablespoon.get());
@@ -257,7 +311,7 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
 
         //4 to 6 skinless, boneless chicken thighs (1 1/4 pounds)
         Ingredient chicken_ChickenThighs = new Ingredient();
-        chicken_ChickenThighs.setRecipe(spicyGrilledChicken);
+        //chicken_ChickenThighs.setRecipe(spicyGrilledChicken);
         chicken_ChickenThighs.setAmount(BigDecimal.valueOf(1.25));
         chicken_ChickenThighs.setDescription("skinless, boneless chicken thighs");
         chicken_ChickenThighs.setUom(uomPound.get());
@@ -265,7 +319,7 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
 
         Notes spicyChickenNotes = new Notes();
         spicyChickenNotes.setRecipeNotes("Look for ancho chile powder with the Mexican ingredients at your grocery store, on buy it online. (If you can't find ancho chili powder, you replace the ancho chili, the oregano, and the cumin with 2 1/2 tablespoons regular chili powder, though the flavor won't be quite the same.)");
-        spicyChickenNotes.setRecipe(spicyGrilledChicken);
+        //spicyChickenNotes.setRecipe(spicyGrilledChicken);
         spicyGrilledChicken.setNotes(spicyChickenNotes);
 
         recipeRepository.save(spicyGrilledChicken);
@@ -422,7 +476,7 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
                 "\n" +
                 "\n" +
                 "Read more: http://www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos/#ixzz4jvu7Q0MJ");
-        tacoNotes.setRecipe(tacosRecipe);
+        //tacoNotes.setRecipe(tacosRecipe);
         tacosRecipe.setNotes(tacoNotes);
 
 

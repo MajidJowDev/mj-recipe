@@ -3,9 +3,12 @@ package mjzguru.com.springframework.recipe.domain;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Cascade;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,8 +18,10 @@ import java.util.Set;
 // Refactor menu, and remove the simple getters and setters ourselves.
 @Getter
 @Setter
+@Document
 public class Recipe {
 
+    @Id
     private String id;
     private String description;
     private Integer prepTime;
@@ -30,17 +35,19 @@ public class Recipe {
     private Difficulty difficulty;
     private Notes notes;
 
+    @DBRef // Indicates that this class is going to be used as a Reference and (this set type is also defined as a Mongo doc)
+    //meaning we can only use @DBRef for the data types (classes) that are defined as a Mongo Doc
     private Set<Category> categories = new HashSet<>();
 
     public void setNotes(Notes notes) {
         if (notes != null) {
             this.notes = notes;
-            notes.setRecipe(this);
+            //notes.setRecipe(this); // since we do not have any relation in NoSQL dbs we need to comment this part, otherwise it will cause circular dependency
         }
     }
 
     public Recipe addIngredient(Ingredient ingredient){
-        ingredient.setRecipe(this);
+        //ingredient.setRecipe(this); // since we do not have any relation in NoSQL dbs we need to comment this part, otherwise it will cause circular dependency
         this.ingredients.add(ingredient);
         return this;
     }

@@ -1,8 +1,10 @@
 package mjzguru.com.springframework.recipe.domain;
 
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
 import java.util.Set;
 
 //@Data // this annotation is from Lombok and adds (override) the default getter and setters (and also equals and hashcode and ToString)
@@ -11,10 +13,14 @@ import java.util.Set;
       // Refactor menu, and remove the simple getters and setters ourselves.
 @Getter
 @Setter
+@Document // explicitly tell Spring that this model is a mongo Document
 public class Category {
 
+    @Id
     private String id;
     private String description;
+
+    @DBRef // we use this annotation to the reference document related to this document (setting up bidirectional mapping)
     private Set<Recipe> recipes;
 
 }

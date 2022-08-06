@@ -77,7 +77,7 @@ public class IngredientServiceImplTest {
 
         //when
         assertEquals("3", ingredientCommand.getId());
-        assertEquals("1", ingredientCommand.getRecipeId());
+        //assertEquals("1", ingredientCommand.getRecipeId());
         verify(recipeRepository, times(1)).findById(anyString());
     }
 
@@ -115,7 +115,7 @@ public class IngredientServiceImplTest {
        Ingredient ingredient = new Ingredient();
        ingredient.setId("3");
        recipe.addIngredient(ingredient);
-       ingredient.setRecipe(recipe);
+       //ingredient.setRecipe(recipe); // removed to avoid circular dependency in Mongo docs
 
        Optional<Recipe> recipeOptional = Optional.of(recipe);
 
