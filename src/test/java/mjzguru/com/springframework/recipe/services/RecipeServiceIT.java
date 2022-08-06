@@ -1,13 +1,15 @@
-/*package mjzguru.com.springframework.recipe.services;
+package mjzguru.com.springframework.recipe.services;
 
 import mjzguru.com.springframework.recipe.commands.RecipeCommand;
 import mjzguru.com.springframework.recipe.converters.RecipeCommandToRecipe;
 import mjzguru.com.springframework.recipe.converters.RecipeToRecipeCommand;
 import mjzguru.com.springframework.recipe.domain.Recipe;
 import mjzguru.com.springframework.recipe.repositories.RecipeRepository;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -15,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.assertEquals;
 
+//@Ignore // we can use this annotation to ignore testing a class or method
+//@DataMongoTest
 @RunWith(SpringRunner.class)
 //@SpringBootTest
 //@DataJpaTest // if we use dataJPA our test will fail because it brings up a light weight spring context and can not find  RecipeService implementation
@@ -40,7 +44,7 @@ public class RecipeServiceIT {
     // because we are working with Entities outside of spring, outside of transactional context
     // , so we need to set this method as Transactional to keep these entities in the context
 
-    @Transactional
+    //@Transactional // transactional will not work with mongoDb test, so I commented it out
     @Test
     public void testSaveOfDescription() throws Exception {
         //given
@@ -61,4 +65,3 @@ public class RecipeServiceIT {
 
 }
 
- */
