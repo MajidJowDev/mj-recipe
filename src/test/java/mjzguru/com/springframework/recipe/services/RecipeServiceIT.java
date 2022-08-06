@@ -45,6 +45,7 @@ public class RecipeServiceIT {
     // , so we need to set this method as Transactional to keep these entities in the context
 
     //@Transactional // transactional will not work with mongoDb test, so I commented it out
+    // mongo db does not have concept of transaction in JPA world
     @Test
     public void testSaveOfDescription() throws Exception {
         //given
