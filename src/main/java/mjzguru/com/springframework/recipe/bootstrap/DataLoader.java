@@ -5,6 +5,8 @@ import mjzguru.com.springframework.recipe.domain.*;
 import mjzguru.com.springframework.recipe.repositories.CategoryRepository;
 import mjzguru.com.springframework.recipe.repositories.RecipeRepository;
 import mjzguru.com.springframework.recipe.repositories.UnitOfMeasureRepository;
+import mjzguru.com.springframework.recipe.repositories.reactive.CategoryReactiveRepository;
+import mjzguru.com.springframework.recipe.repositories.reactive.RecipeReactiveRepository;
 import mjzguru.com.springframework.recipe.repositories.reactive.UnitOfMeasureReactiveRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -25,8 +27,15 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
     private final UnitOfMeasureRepository unitOfMeasureRepository;
     private final CategoryRepository categoryRepository;
 
-    @Autowired
-    UnitOfMeasureReactiveRepository reactiveRepository;
+//    @Autowired
+//    UnitOfMeasureReactiveRepository uomReactiveRepository;
+//
+//    @Autowired
+//    CategoryReactiveRepository categoryReactiveRepository;
+//
+//    @Autowired
+//    RecipeReactiveRepository recipeReactiveRepository;
+
 
     public DataLoader(RecipeRepository recipeRepository, UnitOfMeasureRepository unitOfMeasureRepository, CategoryRepository categoryRepository) {
 
@@ -55,7 +64,9 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
         log.debug("getRecipes Method Called Successfully!!!!****");
         log.error("#######");
         // because the return type is Mono since this repository is a reactive type, so we need to use block() to get it started (we are using block temporarily)
-        log.error("Reactive Repository Count: " + reactiveRepository.count().block().toString());
+//        log.error("UOM Reactive Repository Count: " + uomReactiveRepository.count().block().toString());
+//        log.error("Category Reactive Repository Count: " + categoryReactiveRepository.count().block().toString());
+//        log.error("Recipe Reactive Repository Count: " + recipeReactiveRepository.count().block().toString());
 
     }
 
