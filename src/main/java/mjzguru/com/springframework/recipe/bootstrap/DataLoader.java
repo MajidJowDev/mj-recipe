@@ -5,6 +5,8 @@ import mjzguru.com.springframework.recipe.domain.*;
 import mjzguru.com.springframework.recipe.repositories.CategoryRepository;
 import mjzguru.com.springframework.recipe.repositories.RecipeRepository;
 import mjzguru.com.springframework.recipe.repositories.UnitOfMeasureRepository;
+import mjzguru.com.springframework.recipe.repositories.reactive.UnitOfMeasureReactiveRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
@@ -22,6 +24,9 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
     private final RecipeRepository recipeRepository;
     private final UnitOfMeasureRepository unitOfMeasureRepository;
     private final CategoryRepository categoryRepository;
+
+    @Autowired
+    UnitOfMeasureReactiveRepository reactiveRepository;
 
     public DataLoader(RecipeRepository recipeRepository, UnitOfMeasureRepository unitOfMeasureRepository, CategoryRepository categoryRepository) {
 
@@ -48,6 +53,10 @@ public class DataLoader implements CommandLineRunner, ApplicationListener<Contex
 
         recipeRepository.saveAll(getRecipes());
         log.debug("getRecipes Method Called Successfully!!!!****");
+        log.error("#######");
+        // because the return type is Mono since this repository is a reactive type, so we need to use block() to get it started (we are using block temporarily)
+        log.error("Reactive Repository Count: " + reactiveRepository.count().block().toString());
+
     }
 
     private void loadCategories(){
