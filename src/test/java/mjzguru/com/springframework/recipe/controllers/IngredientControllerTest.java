@@ -2,6 +2,7 @@ package mjzguru.com.springframework.recipe.controllers;
 
 import mjzguru.com.springframework.recipe.commands.IngredientCommand;
 import mjzguru.com.springframework.recipe.commands.RecipeCommand;
+import mjzguru.com.springframework.recipe.commands.UnitOfMeasureCommand;
 import mjzguru.com.springframework.recipe.repositories.RecipeRepository;
 import mjzguru.com.springframework.recipe.services.IngredientService;
 import mjzguru.com.springframework.recipe.services.RecipeService;
@@ -14,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import reactor.core.publisher.Flux;
 
 import java.util.HashSet;
 
@@ -83,7 +85,7 @@ public class IngredientControllerTest {
 
         //when
         when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString())).thenReturn(ingredientCommand);
-        when(unitOfMeasureService.listAllUoms()).thenReturn(new HashSet<>());
+        when(unitOfMeasureService.listAllUoms()).thenReturn(Flux.just(new UnitOfMeasureCommand()));
 
         //then
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/ingredient/2/update"))
@@ -118,11 +120,11 @@ public class IngredientControllerTest {
     public void testNewIngredientForm() throws Exception {
         //given
         RecipeCommand recipeCommand = new RecipeCommand();
-        recipeCommand.setId("1L");
+        recipeCommand.setId("1");
 
         //when
         when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
-        when(unitOfMeasureService.listAllUoms()).thenReturn(new HashSet<>());
+        when(unitOfMeasureService.listAllUoms()).thenReturn(Flux.just(new UnitOfMeasureCommand()));
 
         //then
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/ingredient/new"))
