@@ -8,8 +8,11 @@ import mjzguru.com.springframework.recipe.domain.Ingredient;
 import mjzguru.com.springframework.recipe.domain.Recipe;
 import mjzguru.com.springframework.recipe.repositories.RecipeRepository;
 import mjzguru.com.springframework.recipe.repositories.UnitOfMeasureRepository;
+import mjzguru.com.springframework.recipe.repositories.reactive.RecipeReactiveRepository;
+import mjzguru.com.springframework.recipe.repositories.reactive.UnitOfMeasureReactiveRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
@@ -19,21 +22,39 @@ public class IngredientServiceImpl implements IngredientService {
 
     private final IngredientToIngredientCommand ingredientToIngredientCommand;
     private final IngredientCommandToIngredient ingredientCommandToIngredient;
+    // since Reactive driver for mongoDB does not support @DBRef, if we only use reactive repositories, the lists that are defind as @DBRef s
+    // will be null (a list of null values) so in this case we have to use both Reactive and non-Reactive Repositories as a work around
+    private final RecipeReactiveRepository recipeReactiveRepository;
     private final RecipeRepository recipeRepository;
-    private final UnitOfMeasureRepository unitOfMeasureRepository;
+    private final UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository;
 
     public IngredientServiceImpl(IngredientToIngredientCommand ingredientToIngredientCommand,
                                  IngredientCommandToIngredient ingredientCommandToIngredient,
-                                 RecipeRepository recipeRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
+                                 RecipeReactiveRepository recipeReactiveRepository,
+                                 RecipeRepository recipeRepository, UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository) {
         this.ingredientToIngredientCommand = ingredientToIngredientCommand;
         this.ingredientCommandToIngredient = ingredientCommandToIngredient;
         this.recipeRepository = recipeRepository;
-        this.unitOfMeasureRepository = unitOfMeasureRepository;
+        this.unitOfMeasureReactiveRepository = unitOfMeasureReactiveRepository;
+        this.recipeReactiveRepository = recipeReactiveRepository;
     }
 
     @Override
-    public IngredientCommand findByRecipeIdAndIngredientId(String recipeId, String ingredientId) {
+    public Mono<IngredientCommand> findByRecipeIdAndIngredientId(String recipeId, String ingredientId) {
 
+        return recipeReactiveRepository.findById(recipeId)
+                .map(recipe -> recipe.getIngredients()
+                        .stream()
+                        .filter(ingredient -> ingredient.getId().equalsIgnoreCase(ingredientId))
+                        .findFirst())
+                .map(ingredient -> {
+                    IngredientCommand command = ingredientToIngredientCommand.convert(ingredient.get());
+                    command.setRecipeId(recipeId);
+                    return command;
+                });
+
+        // non-reactive
+        /*
         Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
 
         if (!recipeOptional.isPresent()){
@@ -55,12 +76,13 @@ public class IngredientServiceImpl implements IngredientService {
         IngredientCommand ingredientCommand = ingredientCommandOptional.get();
         ingredientCommand.setRecipeId(recipe.getId());
 
-        return ingredientCommandOptional.get();
+        return  Mono.just(ingredientCommandOptional.get());
+        */
     }
 
     @Override
     @Transactional  // to work with detached entity it's better to use transactional method
-    public IngredientCommand saveIngredientCommand(IngredientCommand command) {
+    public Mono<IngredientCommand> saveIngredientCommand(IngredientCommand command) {
         // command (ingredient) is our detached entity, so first we have to get the Recipe related to the command(ingredient)
         // and then get the ingredient from it based on the command (ingredient command) id and then get the related UOM of it
         //
@@ -70,7 +92,7 @@ public class IngredientServiceImpl implements IngredientService {
 
             //todo toss error if not found!
             log.error("Recipe not found for id: " + command.getRecipeId());
-            return new IngredientCommand();
+            return  Mono.just(new IngredientCommand());
         } else {
             Recipe recipe = recipeOptional.get();
 
@@ -85,9 +107,14 @@ public class IngredientServiceImpl implements IngredientService {
                 Ingredient ingredientFound = ingredientOptional.get();
                 ingredientFound.setDescription(command.getDescription());
                 ingredientFound.setAmount(command.getAmount());
-                ingredientFound.setUom(unitOfMeasureRepository
-                        .findById(command.getUom().getId())
-                        .orElseThrow(() -> new RuntimeException("UOM NOT FOUND"))); //todo address this
+                ingredientFound.setUom(unitOfMeasureReactiveRepository
+                        .findById(command.getUom().getId()).block());
+                        //.orElseThrow(() -> new RuntimeException("UOM NOT FOUND"))); //todo address this
+
+                if (ingredientFound.getUom() == null){
+                    new RuntimeException("UOM NOT FOUND");
+                }
+
             } else {
                 //add new Ingredient
                 recipe.addIngredient(ingredientCommandToIngredient.convert(command));
@@ -99,7 +126,7 @@ public class IngredientServiceImpl implements IngredientService {
                  */
             }
 
-            Recipe savedRecipe = recipeRepository.save(recipe);
+            Recipe savedRecipe = recipeReactiveRepository.save(recipe).block();
 
             Optional<Ingredient> savedIngredientOptional = savedRecipe.getIngredients().stream()
                     .filter(recipeIngredients -> recipeIngredients.getId().equals(command.getId()))
@@ -121,20 +148,22 @@ public class IngredientServiceImpl implements IngredientService {
             IngredientCommand ingredientCommandSaved = ingredientToIngredientCommand.convert(savedIngredientOptional.get());
             ingredientCommandSaved.setRecipeId(recipe.getId());
 
-            return ingredientCommandSaved;
+            return Mono.just(ingredientCommandSaved);
         }
 
     }
 
     @Override
-    public void deleteById(String recipeId, String idToDelete) {
+    public Mono<Void> deleteById(String recipeId, String idToDelete) {
 
         log.debug("Deleting ingredient:" + recipeId + ":" + idToDelete);
 
-        Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
+        //Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
+        Recipe recipe = recipeRepository.findById(recipeId).get();
+        if(recipe != null) {
 
-        if(recipeOptional.isPresent()){
-            Recipe recipe = recipeOptional.get();
+//        if(recipeOptional.isPresent()){
+//            Recipe recipe = recipeOptional.get();
             log.debug("found Recipe");
 
             Optional<Ingredient> ingredientOptional = recipe.getIngredients().stream()
@@ -143,10 +172,11 @@ public class IngredientServiceImpl implements IngredientService {
 
             if(ingredientOptional.isPresent()){
                 log.debug("Ingredient found");
-                Ingredient ingredientToDelete = ingredientOptional.get();
+                /*Ingredient ingredientToDelete = ingredientOptional.get();
                 // remember to use both next two lines (their logic) for deleting an object which is related to another obj...
                 // if we just use the remove the object won't be deleted
                 //ingredientToDelete.setRecipe(null);// this will cause hibernate to delete the ingredient from db
+                */
                 recipe.getIngredients().remove(ingredientOptional.get()); // this will cause hibernate to delete the ingredient from db
 
                 recipeRepository.save(recipe);
@@ -154,6 +184,10 @@ public class IngredientServiceImpl implements IngredientService {
         } else {
             log.debug("Recipe Id not found: " + recipeId);
         }
+
+        // for Mono<void> return type we must use .empty()
+        // Void is kind of a placeholder for generic and we just return null from the statement
+        return Mono.empty();
     }
 
 
