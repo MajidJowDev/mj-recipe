@@ -42,6 +42,7 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     public Mono<IngredientCommand> findByRecipeIdAndIngredientId(String recipeId, String ingredientId) {
 
+        /*
         return recipeReactiveRepository.findById(recipeId)
                 .map(recipe -> recipe.getIngredients()
                         .stream()
@@ -49,6 +50,18 @@ public class IngredientServiceImpl implements IngredientService {
                         .findFirst())
                 .map(ingredient -> {
                     IngredientCommand command = ingredientToIngredientCommand.convert(ingredient.get());
+                    command.setRecipeId(recipeId);
+                    return command;
+                });
+         */
+        // above implementation is correct also but a better way would also be the following implementation
+        return recipeReactiveRepository
+                .findById(recipeId)
+                .flatMapIterable(Recipe::getIngredients) // in this implementation we use flatMapIterable instead of stream ... (Although Stream may have better performance based on my previous searches)
+                .filter(ingredient -> ingredient.getId().equalsIgnoreCase(ingredientId))
+                .single()
+                .map(ingredient -> {
+                    IngredientCommand command = ingredientToIngredientCommand.convert(ingredient);
                     command.setRecipeId(recipeId);
                     return command;
                 });
