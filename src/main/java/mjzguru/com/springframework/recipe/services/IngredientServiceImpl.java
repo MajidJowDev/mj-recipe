@@ -94,7 +94,8 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    @Transactional  // to work with detached entity it's better to use transactional method
+    //@Transactional  // to work with detached entity it's better to use transactional method
+    //MongoDB does not support Transactions
     public Mono<IngredientCommand> saveIngredientCommand(IngredientCommand command) {
         // command (ingredient) is our detached entity, so first we have to get the Recipe related to the command(ingredient)
         // and then get the ingredient from it based on the command (ingredient command) id and then get the related UOM of it
