@@ -35,8 +35,9 @@ public class Recipe {
     private Difficulty difficulty;
     private Notes notes;
 
-    @DBRef // Indicates that this class is going to be used as a Reference and (this set type is also defined as a Mongo doc)
+    //@DBRef // Indicates that this class is going to be used as a Reference and (this set type is also defined as a Mongo doc)
     //meaning we can only use @DBRef for the data types (classes) that are defined as a Mongo Doc
+    //since using @DBRef is not recommended even by the MongoDB guys, we should store the IDs and load the related data on app level as an alternative
     private Set<Category> categories = new HashSet<>();
 
     public void setNotes(Notes notes) {

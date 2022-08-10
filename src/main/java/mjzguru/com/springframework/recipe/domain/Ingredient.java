@@ -22,7 +22,7 @@ public class Ingredient {
     private String description;
     private BigDecimal amount;
 
-    @DBRef
+    //@DBRef //since using @DBRef is not recommended even by the MongoDB guys, we should store the IDs and load the related data on app level as an alternative
     private UnitOfMeasure uom;
     //private Recipe recipe; // removed to avoid circular dependency in Mongo docs
 

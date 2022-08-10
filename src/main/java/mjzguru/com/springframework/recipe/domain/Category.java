@@ -20,7 +20,8 @@ public class Category {
     private String id;
     private String description;
 
-    @DBRef // we use this annotation to the reference document related to this document (setting up bidirectional mapping)
+    //@DBRef // we use this annotation to the reference document related to this document (setting up bidirectional mapping)
+    //since using @DBRef is not recommended even by the MongoDB guys, we should store the IDs and load the related data on app level as an alternative
     private Set<Recipe> recipes;
 
 }
