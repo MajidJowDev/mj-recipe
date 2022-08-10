@@ -7,8 +7,11 @@ import mjzguru.com.springframework.recipe.converters.RecipeToRecipeCommand;
 import mjzguru.com.springframework.recipe.domain.Recipe;
 import mjzguru.com.springframework.recipe.exceptions.NotFoundException;
 import mjzguru.com.springframework.recipe.repositories.RecipeRepository;
+import mjzguru.com.springframework.recipe.repositories.reactive.RecipeReactiveRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -18,31 +21,35 @@ import java.util.Set;
 @Service
 public class RecipeServiceImpl implements RecipeService {
 
-    private final RecipeRepository recipeRepository;
+    private final RecipeReactiveRepository recipeReactiveRepository;
     private final RecipeCommandToRecipe recipeCommandToRecipe;
     private final RecipeToRecipeCommand recipeToRecipeCommand;
 
-    public RecipeServiceImpl(RecipeRepository recipeRepository, RecipeCommandToRecipe recipeCommandToRecipe, RecipeToRecipeCommand recipeToRecipeCommand) {
-        this.recipeRepository = recipeRepository;
+    public RecipeServiceImpl(RecipeReactiveRepository recipeReactiveRepository, RecipeCommandToRecipe recipeCommandToRecipe, RecipeToRecipeCommand recipeToRecipeCommand) {
+        this.recipeReactiveRepository = recipeReactiveRepository;
         this.recipeCommandToRecipe = recipeCommandToRecipe;
         this.recipeToRecipeCommand = recipeToRecipeCommand;
     }
 
     @Override
-    public Set<Recipe> getRecipes() {
+    public Flux<Recipe> getRecipes() {
         log.debug("I'm in the service");
 
+        /*
         Set<Recipe> recipeSet = new HashSet<>();
 
         // adds all objects of RecipeRepository to recipeSet
         recipeRepository.findAll().iterator().forEachRemaining(recipeSet::add);
 
         return recipeSet;
+         */
+        return recipeReactiveRepository.findAll();
     }
 
     @Override
-    public Recipe findById(String id) {
-        Optional<Recipe> recipeOptional = recipeRepository.findById(id);
+    public Mono<Recipe> findById(String id) {
+        /*
+        Optional<Recipe> recipeOptional = recipeReactiveRepository.findById(id);
 
         if(!recipeOptional.isPresent()){
             //throw new RuntimeException("Recipe Not Found!"); // if we use this exception the test will go boom
@@ -50,18 +57,24 @@ public class RecipeServiceImpl implements RecipeService {
         }
 
         return recipeOptional.get();
+        */
+         return recipeReactiveRepository.findById(id);
     }
 
     @Override
-    @Transactional
-    public RecipeCommand saveRecipeCommand(RecipeCommand command) {
-        // recipe command comes in and will be converted to a Recipe POJO, it's not a Hibernate object so we call it detachedRecipe
+    //@Transactional // we do not have transactional in Mongo
+    public Mono<RecipeCommand> saveRecipeCommand(RecipeCommand command) {
+        /*// recipe command comes in and will be converted to a Recipe POJO, it's not a Hibernate object so we call it detachedRecipe
         Recipe detachedRecipe = recipeCommandToRecipe.convert(command);
 
         // spring DataJPA is going to create a new entity if the object is new and if the object exists, it's going to do a merge operation
-        Recipe savedRecipe = recipeRepository.save(detachedRecipe);
+        Recipe savedRecipe = recipeReactiveRepository.save(detachedRecipe);
         log.debug("Saved RecipeId:" + savedRecipe.getId());
         return recipeToRecipeCommand.convert(savedRecipe);
+        */
+         return recipeReactiveRepository.save(recipeCommandToRecipe.convert(command))
+                 .map(recipeToRecipeCommand::convert);
+
     }
 
     // because we are working with Entities outside of spring, outside of transactional context
@@ -70,7 +83,9 @@ public class RecipeServiceImpl implements RecipeService {
     // , so if we hit any lazily loaded properties our method will crash, so we expand the transactional scope to this method
     @Override
     @Transactional
-    public RecipeCommand findCommandById(String id) {
+    public Mono<RecipeCommand> findCommandById(String id) {
+
+        /*
         //return recipeToRecipeCommand.convert(findById(id));
         RecipeCommand recipeCommand = recipeToRecipeCommand.convert(findById(id));
 
@@ -82,10 +97,23 @@ public class RecipeServiceImpl implements RecipeService {
         }
 
         return recipeCommand;
+        */
+        return recipeReactiveRepository.findById(id)
+                .map(recipe -> {
+                    RecipeCommand recipeCommand = recipeToRecipeCommand.convert(recipe);
+
+                    recipeCommand.getIngredients().forEach(ic -> {
+                        ic.setRecipeId(recipeCommand.getId());
+                    });
+                    return recipeCommand;
+                });
     }
 
     @Override
-    public void deleteById(String idToDelete) {
-        recipeRepository.deleteById(idToDelete);
+    public Mono<Void> deleteById(String idToDelete) {
+        //recipeReactiveRepository.deleteById(idToDelete);
+        recipeReactiveRepository.deleteById(idToDelete).block(); // better not use block here and use it in controller
+
+        return Mono.empty();
     }
 }

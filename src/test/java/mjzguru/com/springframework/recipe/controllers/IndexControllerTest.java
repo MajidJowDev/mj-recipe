@@ -4,6 +4,9 @@ import mjzguru.com.springframework.recipe.domain.Recipe;
 import mjzguru.com.springframework.recipe.repositories.CategoryRepository;
 import mjzguru.com.springframework.recipe.repositories.RecipeRepository;
 import mjzguru.com.springframework.recipe.repositories.UnitOfMeasureRepository;
+import mjzguru.com.springframework.recipe.repositories.reactive.CategoryReactiveRepository;
+import mjzguru.com.springframework.recipe.repositories.reactive.RecipeReactiveRepository;
+import mjzguru.com.springframework.recipe.repositories.reactive.UnitOfMeasureReactiveRepository;
 import mjzguru.com.springframework.recipe.services.RecipeService;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,8 +19,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 import org.springframework.mock.http.server.reactive.*;
+import reactor.core.publisher.Flux;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -34,11 +39,11 @@ public class IndexControllerTest {
     @Mock
     RecipeService recipeService;
     @Mock
-    CategoryRepository categoryRepository;
+    CategoryReactiveRepository categoryReactiveRepository;
     @Mock
-    UnitOfMeasureRepository unitOfMeasureRepository;
+    UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository;
     @Mock
-    RecipeRepository recipeRepository;
+    RecipeReactiveRepository recipeReactiveRepository;
 
     @Mock
     Model model;
@@ -47,7 +52,7 @@ public class IndexControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        indexController = new IndexController(categoryRepository, unitOfMeasureRepository, recipeRepository, recipeService );
+        indexController = new IndexController(categoryReactiveRepository, unitOfMeasureReactiveRepository, recipeReactiveRepository, recipeService );
 
     }
 
@@ -57,6 +62,8 @@ public class IndexControllerTest {
         //using it in a standalone setup because if we bring in the web context (spring context) our test is
         // no longer a unit test and will become an integration test
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(indexController).build();
+        when(recipeService.getRecipes()).thenReturn(Flux.empty());
+
         mockMvc.perform(MockMvcRequestBuilders.get("/"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("index"));
@@ -74,9 +81,12 @@ public class IndexControllerTest {
         recipe.setId("1");
         recipes.add(recipe);
 
-        when(recipeService.getRecipes()).thenReturn(recipes);
+        //when(recipeService.getRecipes()).thenReturn(recipes);
+        when(recipeService.getRecipes()).thenReturn(Flux.fromIterable(recipes));
 
-        ArgumentCaptor<Set<Recipe>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
+        //ArgumentCaptor<Set<Recipe>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
+        ArgumentCaptor<List<Recipe>> argumentCaptor = ArgumentCaptor.forClass(List.class);
+
 
         //When
         String viewNameReturnValue = "index"; // expected value
@@ -89,7 +99,8 @@ public class IndexControllerTest {
         // also checks if passed params to addAttribute method are like the following (first param is "recipe" amd second param is some Set or List
         //verify(model, times(1)).addAttribute(eq("recipes"), anySet());
         verify(model, times(1)).addAttribute(eq("recipes"), argumentCaptor.capture());
-        Set<Recipe> setInController = argumentCaptor.getValue();
+        //Set<Recipe> setInController = argumentCaptor.getValue();
+        List<Recipe> setInController = argumentCaptor.getValue();
         assertEquals(2, setInController.size());
 
 

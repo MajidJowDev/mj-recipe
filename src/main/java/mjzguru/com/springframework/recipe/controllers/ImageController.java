@@ -47,7 +47,7 @@ public class ImageController {
     @GetMapping("recipe/{id}/recipeimage")
     // since we need to return the image on the page we should use HttpServletResponse to put the image bytes in it
     public void renderImageFromDB(@PathVariable String id, HttpServletResponse response) throws IOException {
-        RecipeCommand recipeCommand = recipeService.findCommandById(id);
+        RecipeCommand recipeCommand = recipeService.findCommandById(id).block();
 
         byte[] byteArray = new byte[recipeCommand.getImage().length];
 
