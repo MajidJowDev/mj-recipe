@@ -1,11 +1,7 @@
 package mjzguru.com.springframework.recipe.controllers;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @ControllerAdvice //By default, the methods in an @ControllerAdvice apply globally to all controllers
@@ -13,6 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 // so that it can be used globally between all controllers
 public class ControllerExceptionHandler {
 
+    /*
     // we moved this method here so that all controllers can use it globally
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(NumberFormatException.class)
@@ -29,4 +26,5 @@ public class ControllerExceptionHandler {
 
         return modelAndView;
     }
+    */
 }
