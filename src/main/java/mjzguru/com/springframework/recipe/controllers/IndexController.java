@@ -49,7 +49,7 @@ public class IndexController {
     public String getIndexPage(Model model){
         log.info("getIndexPage method called!!!!");
 
-        model.addAttribute("recipes", recipeService.getRecipes().collectList().block());
+        model.addAttribute("recipes", recipeService.getRecipes());
 
         return "index";
     }
@@ -68,7 +68,7 @@ public class IndexController {
         System.out.println("Some message to say...");
 
         //model.addAttribute("recipes", recipeRepository.findAll());
-        model.addAttribute("recipes", recipeReactiveRepository.findAll().collectList().block());
+        model.addAttribute("recipes", recipeReactiveRepository.findAll());
        // model.addAttribute("recipes", recipeService.getRecipes().collectList().block());
 
         return "indexb";

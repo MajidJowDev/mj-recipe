@@ -31,7 +31,7 @@ public class RecipeController {
     public String showById(@PathVariable String id, Model model){ // @PathVariable mathces the variables in url with the method params
 
         //model.addAttribute("recipe", recipeService.findById(new Long(id)));
-        model.addAttribute("recipe", recipeService.findById(id).block());
+        model.addAttribute("recipe", recipeService.findById(id));
 
         return "recipe/show";
     }
@@ -51,7 +51,7 @@ public class RecipeController {
     //@RequestMapping("recipe/{id}/update")
     @GetMapping("recipe/{id}/update")
     public String updateRecipe(@PathVariable String id, Model model){
-        model.addAttribute("recipe", recipeService.findCommandById(id).block());
+        model.addAttribute("recipe", recipeService.findCommandById(id));
 
         return RECIPE_RECIPEFORM_URL;
     }
