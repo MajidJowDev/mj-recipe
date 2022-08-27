@@ -2,12 +2,15 @@ package mjzguru.com.springframework.recipe.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 import mjzguru.com.springframework.recipe.commands.RecipeCommand;
+import mjzguru.com.springframework.recipe.exceptions.NotFoundException;
 import mjzguru.com.springframework.recipe.services.RecipeService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.exceptions.TemplateInputException;
 
 
 import javax.validation.Valid;
@@ -126,23 +129,25 @@ public class RecipeController {
         return "redirect:/"; // redirect to root
     }
 
-    /*
+
     @ResponseStatus(HttpStatus.NOT_FOUND) // add this so that this Status code precedences the default status code
     // (set this status code with upper priority otherwise the real status code would be 200 instead of 404)
-    @ExceptionHandler(NotFoundException.class) // this annotation works at controller level (can be used with @ResponseStatus for just returning a http status)
+    @ExceptionHandler({NotFoundException.class, TemplateInputException.class}) // this annotation works at controller level (can be used with @ResponseStatus for just returning a http status)
     // here we are saying that we are going to use the "NotFoundException" class
-    public ModelAndView handleNotFound(Exception exception) { // we can add the Exception argument so that we can pass in the exception object (info) to the class
+    public String handleNotFound(Exception exception, Model model) { // we can add the Exception argument so that we can pass in the exception object (info) to the class
 
         log.error("Handling not found exception!");
         log.error(exception.getMessage());
 
+        /*
         ModelAndView modelAndView = new ModelAndView();
 
         modelAndView.setViewName("404error"); // should be set according to our html error page so the ThymeLeaf template engine take it and render it
         modelAndView.addObject("exception", exception); // added to display the exception info on the ErrorPage
-
-        return modelAndView;
+*/
+        model.addAttribute("exception", exception);
+        return "404error";//modelAndView;
     }
-     */
+
 
 }
