@@ -6,10 +6,8 @@ import mjzguru.com.springframework.recipe.services.RecipeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
@@ -21,9 +19,22 @@ public class RecipeController {
     private static final String RECIPE_RECIPEFORM_URL = "recipe/recipeform";
     private final RecipeService recipeService;
 
+    // added to handle Binding results and validaitions manually (but will not use it since Spring is currently works fine with the new method)
+   // private WebDataBinder webDataBinder;
+
     public RecipeController(RecipeService recipeService) {
         this.recipeService = recipeService;
     }
+
+    /*
+    // added to handle Binding results and validaitions manually (but will not use it since Spring is currently works fine with the new method)
+    @InitBinder
+    public void initBinder(WebDataBinder webDataBinder){
+        this.webDataBinder = webDataBinder;
+    }
+    */
+
+
 
     //@GetMapping
     //@RequestMapping("/recipe/{id}/show") // we do not need to use both GetMapping and @RequestMapping we can combine them in one annotation
@@ -79,6 +90,30 @@ public class RecipeController {
         //redirect: tells Spring MVC to redirect to a url
         return "redirect:/recipe/" + savedCommand.getId() +"/show";
     }
+
+    /*
+    // added to handle Binding results and validaitions manually (but will not use it since Spring is currently works fine with the new method)
+    @PostMapping( "recipe")
+    public String saveOrUpdateOldWay( @ModelAttribute("recipe") RecipeCommand command){
+
+        webDataBinder.validate();
+        BindingResult bindingResult = webDataBinder.getBindingResult();
+
+
+        if(bindingResult.hasErrors()){ // added to handle validation messages a
+            bindingResult.getAllErrors().forEach(objectError -> {
+                log.debug(objectError.toString());
+            });
+
+            return RECIPE_RECIPEFORM_URL;
+        }
+        RecipeCommand savedCommand = recipeService.saveRecipeCommand(command).block();
+
+        //redirect: tells Spring MVC to redirect to a url
+        return "redirect:/recipe/" + savedCommand.getId() +"/show";
+    }
+    */
+
 
 //    @GetMapping
 //    @RequestMapping("recipe/{id}/delete")
