@@ -9,6 +9,8 @@ import mjzguru.com.springframework.recipe.services.RecipeService;
 import mjzguru.com.springframework.recipe.services.UnitOfMeasureService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -19,10 +21,18 @@ public class IngredientController {
     private final IngredientService ingredientService;
     private final UnitOfMeasureService unitOfMeasureService;
 
+    //Handling Validation and BindingResult manually
+    private WebDataBinder webDataBinder;
+
     public IngredientController(RecipeService recipeService, IngredientService ingredientService, UnitOfMeasureService unitOfMeasureService) {
         this.recipeService = recipeService;
         this.ingredientService = ingredientService;
         this.unitOfMeasureService = unitOfMeasureService;
+    }
+
+    @InitBinder("ingredient") // since we have multiple databinders (we get a databinder for each of the properties) on the form, we need to specify explicitly here, on what model the databinder is going to be applied
+    public void initBinder(WebDataBinder webDataBinder){
+        this.webDataBinder = webDataBinder;
     }
 
 //    @GetMapping
@@ -90,7 +100,22 @@ public class IngredientController {
 //    @PostMapping
 //    @RequestMapping("recipe/{recipeId}/ingredient")
     @PostMapping("recipe/{recipeId}/ingredient")
-    public String saveOrUpdate(@ModelAttribute IngredientCommand command){
+    public String saveOrUpdate(@ModelAttribute("ingredient") IngredientCommand command, @PathVariable String recipeId, Model model){ // each of the properties "command" and "RecipeId" will get a databinder, so we need to specify which one we are going to use
+
+        webDataBinder.validate();
+        BindingResult bindingResult = webDataBinder.getBindingResult();
+
+        if(bindingResult.hasErrors()){
+
+            bindingResult.getAllErrors().forEach(objectError -> {
+                log.debug(objectError.toString());
+            });
+
+            model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
+
+            return "recipe/ingredient/ingredientform";
+        }
+
         IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command).block();
 
         //log.debug("saved receipe id:" + savedCommand.getRecipeId()); // since we do not have any relation in NoSQL dbs we need to comment this part
